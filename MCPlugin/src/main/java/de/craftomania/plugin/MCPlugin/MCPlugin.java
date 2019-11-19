@@ -5,12 +5,16 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import java.util.HashMap;
 
 public final class MCPlugin extends JavaPlugin {
 
+	HashMap<String, String> teams = new HashMap<String, String>();		
+	
 	@Override
     public void onEnable() {
         getLogger().info("MCPlugin an!");
+        
     }
     @Override
     public void onDisable() {
@@ -30,7 +34,7 @@ public final class MCPlugin extends JavaPlugin {
     
     private void checkCommand(CommandSender sender, Command cmd, String label, String[] args) {
     	if (args[0].equalsIgnoreCase("joinclass")) {
-    		String classname = args[1];
+    		String classname = args[1].toLowerCase();
     		String playername = args[2];
     		
     		Player target = Bukkit.getServer().getPlayer(playername);
@@ -43,6 +47,23 @@ public final class MCPlugin extends JavaPlugin {
     
     private void joinClass(Player target, String classname) {
     	
+    	target.sendMessage("Beitritt Klasse: " + classname);
+    	
+    	switch (classname) {
+		case "jaeger":
+			
+			
+			
+			break;
+		case "tank":
+			
+			
+			
+			break;
+		
+		default:
+			break;
+		}
     }
     
 }
