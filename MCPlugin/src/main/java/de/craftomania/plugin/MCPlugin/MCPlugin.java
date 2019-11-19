@@ -118,10 +118,10 @@ public final class MCPlugin extends JavaPlugin {
 			ItemMeta chmeta = chestplate.getItemMeta();
 			chmeta.setDisplayName("Jacke des Jägers");
 			chmeta.setUnbreakable(true);
-			btmeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+			chmeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 			lore = new ArrayList<String>();
 			lore.add("+ 3 armor");
-			btmeta.setLore(lore);
+			chmeta.setLore(lore);
 			chestplate.setItemMeta(chmeta);
 			target.getInventory().setChestplate(chestplate);
 			
