@@ -70,6 +70,7 @@ public final class MCPlugin extends JavaPlugin {
 			target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1, 65000));
 			ItemMeta btmeta = boots.getItemMeta();
 			btmeta.setDisplayName("Schuhe des Jägers");
+			btmeta.setUnbreakable(true);
 			target.getInventory().setBoots(boots);
 			
 			ItemStack chestplate = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
