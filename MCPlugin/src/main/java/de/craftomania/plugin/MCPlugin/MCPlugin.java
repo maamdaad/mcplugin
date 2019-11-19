@@ -1,6 +1,7 @@
 package de.craftomania.plugin.MCPlugin;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -79,6 +80,8 @@ public final class MCPlugin extends JavaPlugin {
     }
     
     private void joinClass(Player target, String classname) {
+    	
+    	target.setGameMode(GameMode.SURVIVAL);
     	
     	inv.put(target.getUniqueId().toString(), target.getInventory().getContents());
     	arm.put(target.getUniqueId().toString(), target.getInventory().getArmorContents());
