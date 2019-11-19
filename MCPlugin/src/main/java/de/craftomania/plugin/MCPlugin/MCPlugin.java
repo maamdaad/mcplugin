@@ -68,7 +68,7 @@ public final class MCPlugin extends JavaPlugin {
     			p.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).removeModifier(new AttributeModifier("test", .15, AttributeModifier.Operation.ADD_NUMBER));
     			p.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).removeModifier(new AttributeModifier("test", 10, AttributeModifier.Operation.ADD_NUMBER));
     			
-    			p.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)
+    			p.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
     			
     			p.getInventory().clear();
     			p.sendMessage("Team verlassen!");
