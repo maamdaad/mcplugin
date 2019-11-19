@@ -6,8 +6,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
@@ -18,6 +20,8 @@ import java.util.HashMap;
 public final class MCPlugin extends JavaPlugin {
 
 	HashMap<String, String> teams = new HashMap<String, String>();		
+	HashMap<String, ItemStack[]> inv = new HashMap<String, ItemStack[]>();
+	HashMap<String, ItemStack[]> arm = new HashMap<String, ItemStack[]>();
 	
 	@Override
     public void onEnable() {
@@ -54,9 +58,15 @@ public final class MCPlugin extends JavaPlugin {
         	}
     		if (args[0].equalsIgnoreCase("leaveclass")) {
     			teams.remove(args[1]);
-    			Bukkit.getServer().getPlayer(args[1]).removePotionEffect(PotionEffectType.SPEED);
-    			Bukkit.getServer().getPlayer(args[1]).getInventory().clear();
-    			Bukkit.getServer().getPlayer(args[1]).sendMessage("Team verlassen!");
+    			
+    			Player p = Bukkit.getServer().getPlayer(args[1]);
+    			
+    			p.removePotionEffect(PotionEffectType.SPEED);
+    			p.getInventory().clear();
+    			p.sendMessage("Team verlassen!");
+    			
+    			p.getInventory().setContents(inv.get(p.getName()));
+    			p.getInventory().setContents(arm.get(p.getName()));
     			
     		}
     	} else {
@@ -65,6 +75,9 @@ public final class MCPlugin extends JavaPlugin {
     }
     
     private void joinClass(Player target, String classname) {
+    	
+    	inv.put(target.getName(), target.getInventory().getContents());
+    	arm.put(target.getName(), target.getInventory().getArmorContents());
     	
     	target.sendMessage("Beitritt Klasse: " + classname);
     	
@@ -82,6 +95,7 @@ public final class MCPlugin extends JavaPlugin {
 			ItemMeta btmeta = boots.getItemMeta();
 			btmeta.setDisplayName("Schuhe des Jägers");
 			btmeta.setUnbreakable(true);
+			boots.setItemMeta(btmeta);
 			target.getInventory().setBoots(boots);
 			
 			ItemStack chestplate = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
@@ -89,6 +103,7 @@ public final class MCPlugin extends JavaPlugin {
 			ItemMeta chmeta = chestplate.getItemMeta();
 			chmeta.setDisplayName("Jacke des Jägers");
 			chmeta.setUnbreakable(true);
+			chestplate.setItemMeta(chmeta);
 			target.getInventory().setChestplate(chestplate);
 			
 			target.sendMessage("Inventar übertragen!");
