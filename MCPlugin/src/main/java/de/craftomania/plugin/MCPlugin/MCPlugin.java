@@ -66,7 +66,7 @@ public final class MCPlugin extends JavaPlugin {
     			p.sendMessage("Team verlassen!");
     			
     			p.getInventory().setContents(inv.get(p.getName()));
-    			p.getInventory().setContents(arm.get(p.getName()));
+    			p.getInventory().setArmorContents(arm.get(p.getName()));
     			
     		}
     	} else {
