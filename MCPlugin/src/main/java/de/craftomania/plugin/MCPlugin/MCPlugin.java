@@ -65,12 +65,12 @@ public final class MCPlugin extends JavaPlugin {
     			p.getInventory().clear();
     			p.sendMessage("Team verlassen!");
     			
-    			p.getInventory().setContents(inv.get(p.getName()));
-    			p.getInventory().setArmorContents(arm.get(p.getName()));
+    			p.getInventory().setContents(inv.get(p.getUniqueId().toString()));
+    			p.getInventory().setArmorContents(arm.get(p.getUniqueId().toString()));
     			
-    			arm.remove(p.getName());
-    			inv.remove(p.getName());
-    			teams.remove(p.getName());
+    			arm.remove(p.getUniqueId().toString());
+    			inv.remove(p.getUniqueId().toString());
+    			teams.remove(p.getUniqueId().toString());
     			
     		}
     	} else {
@@ -80,15 +80,15 @@ public final class MCPlugin extends JavaPlugin {
     
     private void joinClass(Player target, String classname) {
     	
-    	inv.put(target.getName(), target.getInventory().getContents());
-    	arm.put(target.getName(), target.getInventory().getArmorContents());
+    	inv.put(target.getUniqueId().toString(), target.getInventory().getContents());
+    	arm.put(target.getUniqueId().toString(), target.getInventory().getArmorContents());
     	
     	target.sendMessage("Beitritt Klasse: " + classname);
     	
     	switch (classname) {
 		case "jaeger":
 			
-			teams.put(target.getName(), classname);
+			teams.put(target.getUniqueId().toString(), classname);
 			
 			target.getInventory().clear();
 			
@@ -111,7 +111,7 @@ public final class MCPlugin extends JavaPlugin {
 			target.getInventory().setChestplate(chestplate);
 			
 			ItemStack bow = new ItemStack(Material.BOW, 1);
-			ItemMeta bmeta = chestplate.getItemMeta();
+			ItemMeta bmeta = bow.getItemMeta();
 			bmeta.setDisplayName("Bogen des Jägers");
 			bmeta.setUnbreakable(true);
 			bow.setItemMeta(bmeta);
@@ -123,7 +123,6 @@ public final class MCPlugin extends JavaPlugin {
 			smeta.setUnbreakable(true);
 			sword.setItemMeta(smeta);
 			target.getInventory().setItem(1, sword);
-			
 			
 			target.sendMessage("Inventar übertragen!");
 			target.sendMessage("Du bist jetzt in Klasse Jaeger!");
