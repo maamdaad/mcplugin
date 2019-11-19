@@ -102,7 +102,7 @@ public final class MCPlugin extends JavaPlugin {
 			ItemMeta btmeta = boots.getItemMeta();
 			btmeta.setDisplayName("Schuhe des Jägers");
 			btmeta.setUnbreakable(true);
-			btmeta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier("generic.attackSpeed", 0.2, AttributeModifier.Operation.ADD_NUMBER));
+			btmeta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier("generic.movementspeed", 0.2, AttributeModifier.Operation.ADD_NUMBER));
 			boots.setItemMeta(btmeta);
 			target.getInventory().setBoots(boots);
 			
