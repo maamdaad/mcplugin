@@ -41,14 +41,25 @@ public final class MCPlugin extends JavaPlugin {
     }
     
     private void checkCommand(CommandSender sender, Command cmd, String label, String[] args) {
-    	if (args[0].equalsIgnoreCase("joinclass")) {
-    		String classname = args[1].toLowerCase();
-    		String playername = args[2];
-    		
-    		Player target = Bukkit.getServer().getPlayer(playername);
-    		
-    		joinClass(target, classname);
-    		
+    	if (args.length > 0) {
+    		if (args[0].equalsIgnoreCase("joinclass")) {
+        		String classname = args[1].toLowerCase();
+        		String playername = args[2];
+        		
+        		Player target = Bukkit.getServer().getPlayer(playername);
+        		
+        		joinClass(target, classname);
+        		
+        		
+        	}
+    		if (args[0].equalsIgnoreCase("leaveclass")) {
+    			teams.remove(args[1]);
+    			Bukkit.getServer().getPlayer(args[1]).removePotionEffect(PotionEffectType.SPEED);
+    			Bukkit.getServer().getPlayer(args[1]).getInventory().clear();
+    			Bukkit.getServer().getPlayer(args[1]).sendMessage("Team verlassen!");
+    			
+    		}
+    	} else {
     		
     	}
     }
@@ -67,7 +78,7 @@ public final class MCPlugin extends JavaPlugin {
 			ItemStack boots = new ItemStack(Material.LEATHER_BOOTS, 1);
 			
 			boots.addEnchantment(Enchantment.BINDING_CURSE, 1);
-			target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1, 65000));
+			target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 65000, 1));
 			ItemMeta btmeta = boots.getItemMeta();
 			btmeta.setDisplayName("Schuhe des Jägers");
 			btmeta.setUnbreakable(true);
@@ -81,6 +92,7 @@ public final class MCPlugin extends JavaPlugin {
 			target.getInventory().setChestplate(chestplate);
 			
 			target.sendMessage("Inventar übertragen!");
+			target.sendMessage("Du bist jetzt in Klasse Jaeger!");
 			
 			break;
 		case "tank":
