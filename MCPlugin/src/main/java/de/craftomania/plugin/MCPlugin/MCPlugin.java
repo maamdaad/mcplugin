@@ -64,10 +64,6 @@ public final class MCPlugin extends JavaPlugin {
     			
     			Player p = Bukkit.getServer().getPlayer(args[1]);
     			
-    			p.removePotionEffect(PotionEffectType.SPEED);
-    			
-    			p.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(p.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getDefaultValue());
-    			
     			p.getInventory().clear();
     			p.sendMessage("Team verlassen!");
     			
@@ -103,10 +99,10 @@ public final class MCPlugin extends JavaPlugin {
 			ItemStack boots = new ItemStack(Material.LEATHER_BOOTS, 1);
 			
 			boots.addEnchantment(Enchantment.BINDING_CURSE, 1);
-			target.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.15);
 			ItemMeta btmeta = boots.getItemMeta();
 			btmeta.setDisplayName("Schuhe des Jägers");
 			btmeta.setUnbreakable(true);
+			btmeta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier("generic.attackSpeed", 0.2, AttributeModifier.Operation.ADD_NUMBER));
 			boots.setItemMeta(btmeta);
 			target.getInventory().setBoots(boots);
 			
