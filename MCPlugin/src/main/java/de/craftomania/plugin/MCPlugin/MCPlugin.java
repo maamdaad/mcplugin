@@ -68,6 +68,10 @@ public final class MCPlugin extends JavaPlugin {
     			p.getInventory().setContents(inv.get(p.getName()));
     			p.getInventory().setArmorContents(arm.get(p.getName()));
     			
+    			arm.remove(p.getName());
+    			inv.remove(p.getName());
+    			teams.remove(p.getName());
+    			
     		}
     	} else {
     		
@@ -91,7 +95,7 @@ public final class MCPlugin extends JavaPlugin {
 			ItemStack boots = new ItemStack(Material.LEATHER_BOOTS, 1);
 			
 			boots.addEnchantment(Enchantment.BINDING_CURSE, 1);
-			target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 65000, 1));
+			target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 65000, 0));
 			ItemMeta btmeta = boots.getItemMeta();
 			btmeta.setDisplayName("Schuhe des Jägers");
 			btmeta.setUnbreakable(true);
@@ -106,8 +110,24 @@ public final class MCPlugin extends JavaPlugin {
 			chestplate.setItemMeta(chmeta);
 			target.getInventory().setChestplate(chestplate);
 			
+			ItemStack bow = new ItemStack(Material.BOW, 1);
+			ItemMeta bmeta = chestplate.getItemMeta();
+			bmeta.setDisplayName("Bogen des Jägers");
+			bmeta.setUnbreakable(true);
+			bow.setItemMeta(bmeta);
+			target.getInventory().setItem(0, bow);
+			
+			ItemStack sword = new ItemStack(Material.WOODEN_SWORD,1);
+			ItemMeta smeta = sword.getItemMeta();
+			smeta.setDisplayName("Schwert des Jägers");
+			smeta.setUnbreakable(true);
+			sword.setItemMeta(smeta);
+			target.getInventory().setItem(1, sword);
+			
+			
 			target.sendMessage("Inventar übertragen!");
 			target.sendMessage("Du bist jetzt in Klasse Jaeger!");
+			
 			
 			break;
 		case "tank":
