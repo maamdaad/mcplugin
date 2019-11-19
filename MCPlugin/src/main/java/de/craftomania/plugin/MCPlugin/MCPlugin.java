@@ -1,10 +1,18 @@
 package de.craftomania.plugin.MCPlugin;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
 import java.util.HashMap;
 
 public final class MCPlugin extends JavaPlugin {
@@ -52,7 +60,26 @@ public final class MCPlugin extends JavaPlugin {
     	switch (classname) {
 		case "jaeger":
 			
+			teams.put(target.getName(), classname);
 			
+			target.getInventory().clear();
+			
+			ItemStack boots = new ItemStack(Material.LEATHER_BOOTS, 1);
+			
+			boots.addEnchantment(Enchantment.BINDING_CURSE, 1);
+			target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1, 65000));
+			ItemMeta btmeta = boots.getItemMeta();
+			btmeta.setDisplayName("Schuhe des Jägers");
+			target.getInventory().setBoots(boots);
+			
+			ItemStack chestplate = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
+			chestplate.addEnchantment(Enchantment.BINDING_CURSE, 1);
+			ItemMeta chmeta = chestplate.getItemMeta();
+			chmeta.setDisplayName("Jacke des Jägers");
+			chmeta.setUnbreakable(true);
+			target.getInventory().setChestplate(chestplate);
+			
+			target.sendMessage("Inventar übertragen!");
 			
 			break;
 		case "tank":
