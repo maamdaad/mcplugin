@@ -3,6 +3,8 @@ package de.craftomania.plugin.MCPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
@@ -63,6 +65,11 @@ public final class MCPlugin extends JavaPlugin {
     			Player p = Bukkit.getServer().getPlayer(args[1]);
     			
     			p.removePotionEffect(PotionEffectType.SPEED);
+    			p.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).removeModifier(new AttributeModifier("test", .15, AttributeModifier.Operation.ADD_NUMBER));
+    			p.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).removeModifier(new AttributeModifier("test", 10, AttributeModifier.Operation.ADD_NUMBER));
+    			
+    			p.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)
+    			
     			p.getInventory().clear();
     			p.sendMessage("Team verlassen!");
     			
@@ -98,7 +105,7 @@ public final class MCPlugin extends JavaPlugin {
 			ItemStack boots = new ItemStack(Material.LEATHER_BOOTS, 1);
 			
 			boots.addEnchantment(Enchantment.BINDING_CURSE, 1);
-			target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 65000, 0));
+			target.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).addModifier(new AttributeModifier("test", .15, AttributeModifier.Operation.ADD_NUMBER));
 			ItemMeta btmeta = boots.getItemMeta();
 			btmeta.setDisplayName("Schuhe des Jägers");
 			btmeta.setUnbreakable(true);
