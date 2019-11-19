@@ -19,6 +19,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public final class MCPlugin extends JavaPlugin {
@@ -103,8 +104,12 @@ public final class MCPlugin extends JavaPlugin {
 			ItemMeta btmeta = boots.getItemMeta();
 			btmeta.setDisplayName("Schuhe des Jägers");
 			btmeta.setUnbreakable(true);
-			btmeta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier("generic.movementspeed", 0.05, AttributeModifier.Operation.ADD_NUMBER));
+			btmeta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier("generic.movementspeed", 0.015, AttributeModifier.Operation.ADD_NUMBER));
 			btmeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+			ArrayList<String> lore = new ArrayList<String>();
+			lore.add("+ 15% movement speed");
+			lore.add("+ 1 armor");
+			btmeta.setLore(lore);
 			boots.setItemMeta(btmeta);
 			target.getInventory().setBoots(boots);
 			
@@ -113,6 +118,10 @@ public final class MCPlugin extends JavaPlugin {
 			ItemMeta chmeta = chestplate.getItemMeta();
 			chmeta.setDisplayName("Jacke des Jägers");
 			chmeta.setUnbreakable(true);
+			btmeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+			lore = new ArrayList<String>();
+			lore.add("+ 3 armor");
+			btmeta.setLore(lore);
 			chestplate.setItemMeta(chmeta);
 			target.getInventory().setChestplate(chestplate);
 			
