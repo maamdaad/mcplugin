@@ -1,8 +1,10 @@
 name: MCPlugin
 main: de.craftomania.plugin.MCPlugin.MCPlugin
+version: 0.0.3
+author: maamdaad
 commands:
-  basic:
-    description: arena
-    usage: /arena args
-    permission: MCPlugin.arena
-    permission-message: You don't have <permission>
+   arena:
+      description: arena.
+      usage: /arena [args]
+      permission: MCPlugin.arena
+      permission-message: You don't have <permission>
