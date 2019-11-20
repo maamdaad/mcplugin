@@ -11,15 +11,18 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.block.*;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public final class MCPlugin extends JavaPlugin implements Listener {
 
@@ -27,6 +30,8 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 	HashMap<String, ItemStack[]> inv = new HashMap<String, ItemStack[]>();
 	HashMap<String, ItemStack[]> arm = new HashMap<String, ItemStack[]>();
 	HashMap<String, Integer> level = new HashMap<String, Integer>();
+	
+	long[] bowcooldown = {3000, 2500, 2500, 2000, 1000, 750, 500, 250};
 	
 	@Override
     public void onEnable() {
@@ -37,6 +42,12 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     public void onDisable() {
     	getLogger().info("MCPlugin aus!");
         
+    }
+    
+    private void start() {
+    	
+    	
+    	
     }
     
     private void leaveteam(Player target) {
@@ -50,31 +61,55 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 			arm.remove(target.getUniqueId().toString());
 			inv.remove(target.getUniqueId().toString());
 			teams.remove(target.getUniqueId().toString());
+			level.remove(target.getUniqueId().toString());
 		} else {
 			target.sendMessage("Player nicht in Team");
 		}
     }
     
     @EventHandler
+    public void onPlayerShoot(EntityShootBowEvent e) {
+    	
+    	if (e.getEntity() instanceof Player) {
+    		final Player target = (Player) e.getEntity();
+        	
+        	if (teams.get( target.getUniqueId().toString() ).equalsIgnoreCase("jaeger")) {
+        		target.sendMessage("Arrow geschossen! Cooldown: " + bowcooldown[ level.get(target.getUniqueId().toString()) ] + " ms");
+            	
+        		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+        		    public void run() {
+        		    	ItemStack a = new ItemStack(Material.ARROW,1);
+                    	
+                    	target.getInventory().addItem(a);
+        		    }
+        		}, bowcooldown[ level.get(target.getUniqueId().toString()) ]);
+
+        	}
+    	}
+    }
+    
+    @EventHandler
     public void onPlayerClickSign(PlayerInteractEvent event){
         Player target = event.getPlayer();
         if(event.getClickedBlock().getType() == Material.OAK_SIGN || event.getClickedBlock().getType() == Material.OAK_WALL_SIGN){
-            target.sendMessage("Sie haben ein Schild angeclickt!!!");
+           
             Sign sign = (Sign) event.getClickedBlock().getState();
             
-            if (sign.getLine(0).equalsIgnoreCase("join")) {
+            if (sign.getLine(0).equalsIgnoreCase("(join)")) {
             	
             	joinClass(target, sign.getLine(1));
             	
-            } else if (sign.getLine(0).equalsIgnoreCase("leave")) {
+            } else if (sign.getLine(0).equalsIgnoreCase("(leave)")) {
             	
             	leaveteam(target);
             	
-            } else if (sign.getLine(0).equalsIgnoreCase("levelup")) {
+            } else if (sign.getLine(0).equalsIgnoreCase("(levelup)")) {
             	
             	levelclass(target);
             	
-            } else {
+            } else if (sign.getLine(0).equalsIgnoreCase("(start)")) {
+            	
+            	start();
             	
             }
             
@@ -131,6 +166,12 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     			target.sendMessage("Du bist in Team: " + teams.get(target.getUniqueId().toString()));
     		}
     		
+    		if (args[0].equalsIgnoreCase("inlevel")) {
+    			Player target = Bukkit.getServer().getPlayer(args[1]);
+    			
+    			target.sendMessage("Du bist in Level: " + level.get(target.getUniqueId().toString()));
+    		}
+    		
     	} else {
     		
     	}
@@ -169,14 +210,14 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     
     private void levelclass(Player target) {
     	
-    	int newlevel = level.get(target.getUniqueId().toString());
+    	int newlevel = level.get(target.getUniqueId().toString()) + 1;
     	
-    	if (teams.get(target.getUniqueId().toString()) == "jaeger"){
+    	if (teams.get(target.getUniqueId().toString()).equalsIgnoreCase("jaeger")){
     		
     		jaeger(newlevel, target);
     		
     	}
-    	if (teams.get(target.getUniqueId().toString()) == "tank"){
+    	if (teams.get(target.getUniqueId().toString()).equalsIgnoreCase("tank")){
     		
     		tank(newlevel, target);
     		
@@ -231,6 +272,9 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     		smeta.setUnbreakable(true);
     		sword.setItemMeta(smeta);
     		target.getInventory().setItem(1, sword);
+    		
+    		ItemStack arrow = new ItemStack(Material.ARROW,1);
+    		target.getInventory().addItem(arrow);
     		
     		target.sendMessage("Inventar übertragen!");
     		target.sendMessage("Du bist jetzt in Klasse Jaeger!");
