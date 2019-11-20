@@ -26,6 +26,7 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 	HashMap<String, String> teams = new HashMap<String, String>();		
 	HashMap<String, ItemStack[]> inv = new HashMap<String, ItemStack[]>();
 	HashMap<String, ItemStack[]> arm = new HashMap<String, ItemStack[]>();
+	HashMap<String, Integer> level = new HashMap<String, Integer>();
 	
 	@Override
     public void onEnable() {
@@ -38,14 +39,44 @@ public final class MCPlugin extends JavaPlugin implements Listener {
         
     }
     
+    private void leaveteam(Player target) {
+    	if (teams.get(target.getUniqueId().toString()) != null) {
+			target.getInventory().clear();
+			target.sendMessage("Team verlassen!");
+		
+			target.getInventory().setContents(inv.get(target.getUniqueId().toString()));
+			target.getInventory().setArmorContents(arm.get(target.getUniqueId().toString()));
+		
+			arm.remove(target.getUniqueId().toString());
+			inv.remove(target.getUniqueId().toString());
+			teams.remove(target.getUniqueId().toString());
+		} else {
+			target.sendMessage("Player nicht in Team");
+		}
+    }
+    
     @EventHandler
     public void onPlayerClickSign(PlayerInteractEvent event){
-        Player p = event.getPlayer();
+        Player target = event.getPlayer();
         if(event.getClickedBlock().getType() == Material.OAK_SIGN || event.getClickedBlock().getType() == Material.OAK_WALL_SIGN){
-            p.sendMessage("Sie haben ein Schild angeclickt!!!");
+            target.sendMessage("Sie haben ein Schild angeclickt!!!");
             Sign sign = (Sign) event.getClickedBlock().getState();
             
-            
+            if (sign.getLine(0) == "join") {
+            	
+            	joinClass(target, sign.getLine(1));
+            	
+            } else if (sign.getLine(0) == "leave") {
+            	
+            	leaveteam(target);
+            	
+            } else if (sign.getLine(0) == "levelup") {
+            	
+            	levelclass(target);
+            	
+            } else {
+            	
+            }
             
         }
     }
@@ -90,20 +121,7 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     			
 				Player target = Bukkit.getServer().getPlayer(args[1]);
 				
-				if (teams.get(target.getUniqueId().toString()) != null) {
-					target.getInventory().clear();
-					target.sendMessage("Team verlassen!");
-				
-					target.getInventory().setContents(inv.get(target.getUniqueId().toString()));
-					target.getInventory().setArmorContents(arm.get(target.getUniqueId().toString()));
-				
-					arm.remove(target.getUniqueId().toString());
-					inv.remove(target.getUniqueId().toString());
-					teams.remove(target.getUniqueId().toString());
-				} else {
-					target.sendMessage("Player nicht in Team");
-				}
-				
+				leaveteam(target);
 				
     		}
     		
@@ -133,7 +151,7 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 		case "jaeger":
 			
 			teams.put(target.getUniqueId().toString(), classname);
-			jaeger(0, target, classname);
+			jaeger(0, target);
 			
 			break;
 		case "tank":
@@ -149,7 +167,28 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     	return 1;
     }
     
-    private void jaeger(int level, Player target, String classname) {
+    private void levelclass(Player target) {
+    	
+    	int newlevel = level.get(target.getUniqueId().toString());
+    	
+    	if (teams.get(target.getUniqueId().toString()) == "jaeger"){
+    		
+    		jaeger(newlevel, target);
+    		
+    	}
+    	if (teams.get(target.getUniqueId().toString()) == "tank"){
+    		
+    		tank(newlevel, target);
+    		
+    	}
+    	
+    	
+    }
+    
+    private void jaeger(int level, Player target) {
+    	
+    	this.level.put(target.getUniqueId().toString(), level);
+    	
     	if (level == 0) {
     		   		
     		ItemStack boots = new ItemStack(Material.LEATHER_BOOTS, 1);
@@ -195,9 +234,17 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     		
     		target.sendMessage("Inventar übertragen!");
     		target.sendMessage("Du bist jetzt in Klasse Jaeger!");
+    		
+    	
     	} else if (level == 1) {
     		
+    		target.sendMessage("Du bist jetzt Jäger Level 2");
+    		
     	}
+    }
+    
+    private void tank(int level, Player target) {
+    	
     }
     
 }
