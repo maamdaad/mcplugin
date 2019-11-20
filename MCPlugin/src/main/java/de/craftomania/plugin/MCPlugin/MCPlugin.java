@@ -105,7 +105,13 @@ public final class MCPlugin extends JavaPlugin implements Listener {
                 
                 if (sign.getLine(0).equalsIgnoreCase("(join)")) {
                 	
-                	joinClass(target, sign.getLine(1));
+                	
+                	if (teams.get(target.getUniqueId().toString()) == null) {
+            			joinClass(target, sign.getLine(1));
+            		} else {
+            			target.sendMessage("Player schon in Team");
+            		}
+                	
                 	
                 } else if (sign.getLine(0).equalsIgnoreCase("(leave)")) {
                 	
