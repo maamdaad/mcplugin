@@ -119,7 +119,11 @@ public final class MCPlugin extends JavaPlugin implements Listener {
                 	
                 } else if (sign.getLine(0).equalsIgnoreCase("(levelup)")) {
                 	
-                	levelclass(target);
+                	if (teams.get(target.getUniqueId().toString()) != null) {
+                		levelclass(target);
+            		} else {
+            			target.sendMessage("Player nicht in Team");
+            		}
                 	
                 } else if (sign.getLine(0).equalsIgnoreCase("(start)")) {
                 	
