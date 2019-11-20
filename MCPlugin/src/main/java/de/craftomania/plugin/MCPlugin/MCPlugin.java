@@ -62,15 +62,15 @@ public final class MCPlugin extends JavaPlugin implements Listener {
             target.sendMessage("Sie haben ein Schild angeclickt!!!");
             Sign sign = (Sign) event.getClickedBlock().getState();
             
-            if (sign.getLine(0) == "join") {
+            if (sign.getLine(0).equalsIgnoreCase("join")) {
             	
             	joinClass(target, sign.getLine(1));
             	
-            } else if (sign.getLine(0) == "leave") {
+            } else if (sign.getLine(0).equalsIgnoreCase("leave")) {
             	
             	leaveteam(target);
             	
-            } else if (sign.getLine(0) == "levelup") {
+            } else if (sign.getLine(0).equalsIgnoreCase("levelup")) {
             	
             	levelclass(target);
             	
