@@ -60,38 +60,41 @@ public final class MCPlugin extends JavaPlugin {
     private void checkCommand(CommandSender sender, Command cmd, String label, String[] args) {
     	if (args.length > 0) {
     		if (args[0].equalsIgnoreCase("joinclass")) {
-        		if (teams.get(((Player) sender).getUniqueId().toString()).equals(null)) {
-        			String classname = args[1].toLowerCase();
-            		String playername = args[2];
-            		
-            		Player target = Bukkit.getServer().getPlayer(playername);
-            		
-            		joinClass(target, classname);
+    			    			
+    			String classname = args[1].toLowerCase();
+        		String playername = args[2];
+        		
+        		Player target = Bukkit.getServer().getPlayer(playername);
+        		
+        		if (teams.get(target.getUniqueId().toString()) == null) {
+        			joinClass(target, classname);
         		} else {
-        			sender.sendMessage("Player nicht bekannt oder bereits in Team");
+        			target.sendMessage("Player schon in Team");
         		}
+        		
+        		
+
         	} 
     		
     		if (args[0].equalsIgnoreCase("leaveclass")) {
     			
-    			if (!teams.get(((Player) sender).getUniqueId().toString()).equals(null)) { 
-    			
-    				teams.remove(args[1]);
-    			
-    				Player target = Bukkit.getServer().getPlayer(args[1]);
-    			
-    				target.getInventory().clear();
-    				target.sendMessage("Team verlassen!");
-    			
-    				target.getInventory().setContents(inv.get(target.getUniqueId().toString()));
-    				target.getInventory().setArmorContents(arm.get(target.getUniqueId().toString()));
-    			
-    				arm.remove(target.getUniqueId().toString());
-    				inv.remove(target.getUniqueId().toString());
-    				teams.remove(target.getUniqueId().toString());
-    			} else {
-        			sender.sendMessage("Player nicht bekannt oder nicht in Team");
-        		}
+				Player target = Bukkit.getServer().getPlayer(args[1]);
+				
+				if (teams.get(target.getUniqueId().toString()) != null) {
+					target.getInventory().clear();
+					target.sendMessage("Team verlassen!");
+				
+					target.getInventory().setContents(inv.get(target.getUniqueId().toString()));
+					target.getInventory().setArmorContents(arm.get(target.getUniqueId().toString()));
+				
+					arm.remove(target.getUniqueId().toString());
+					inv.remove(target.getUniqueId().toString());
+					teams.remove(target.getUniqueId().toString());
+				} else {
+					target.sendMessage("Player nicht in Team");
+				}
+				
+				
     		}
     		
     		if (args[0].equalsIgnoreCase("inteam")) {
