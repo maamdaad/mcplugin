@@ -246,6 +246,8 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     		
     	}
     	
+    	level.put(target.getUniqueId().toString(), newlevel);
+    	
     	
     }
 }
