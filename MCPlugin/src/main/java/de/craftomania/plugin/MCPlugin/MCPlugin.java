@@ -45,10 +45,8 @@ public final class MCPlugin extends JavaPlugin implements Listener {
             p.sendMessage("Sie haben ein Schild angeclickt!!!");
             Sign sign = (Sign) event.getClickedBlock().getState();
             
-            p.sendMessage("Line 1: " + sign.getLine(0));
-            p.sendMessage("Line 2: " + sign.getLine(1));
-            p.sendMessage("Line 3: " + sign.getLine(2));
-            p.sendMessage("Line 4: " + sign.getLine(3));
+            
+            
         }
     }
 	
