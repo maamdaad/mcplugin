@@ -30,8 +30,11 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 	HashMap<String, ItemStack[]> inv = new HashMap<String, ItemStack[]>();
 	HashMap<String, ItemStack[]> arm = new HashMap<String, ItemStack[]>();
 	HashMap<String, Integer> level = new HashMap<String, Integer>();
+	HashMap<String, GameMode> gamemodes = new HashMap<String, GameMode>(); 
 	
-	long[] bowcooldown = {3000, 2500, 2500, 2000, 1000, 750, 500, 250};
+	long ticks = 14;
+	
+	long[] bowcooldown = {ticks * 3, ticks * 2, ticks * 2, ticks * 2, ticks * 1, ticks * 1, ticks * 1, ticks * 1};
 	
 	@Override
     public void onEnable() {
@@ -58,10 +61,13 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 			target.getInventory().setContents(inv.get(target.getUniqueId().toString()));
 			target.getInventory().setArmorContents(arm.get(target.getUniqueId().toString()));
 		
+			target.setGameMode(gamemodes.get( target.getUniqueId().toString() ));
+			
 			arm.remove(target.getUniqueId().toString());
 			inv.remove(target.getUniqueId().toString());
 			teams.remove(target.getUniqueId().toString());
 			level.remove(target.getUniqueId().toString());
+			gamemodes.remove(target.getUniqueId().toString());
 		} else {
 			target.sendMessage("Player nicht in Team");
 		}
@@ -74,7 +80,7 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     		final Player target = (Player) e.getEntity();
         	
         	if (teams.get( target.getUniqueId().toString() ).equalsIgnoreCase("jaeger")) {
-        		target.sendMessage("Arrow geschossen! Cooldown: " + bowcooldown[ level.get(target.getUniqueId().toString()) ] + " ms");
+        		target.sendMessage("Arrow geschossen! Cooldown: " + bowcooldown[ level.get(target.getUniqueId().toString()) ] + " ticks");
             	
         		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
         		    public void run() {
@@ -178,6 +184,8 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     }
     
     private int joinClass(Player target, String classname) {
+    	
+    	gamemodes.put(target.getUniqueId().toString(), target.getGameMode());
     	
     	target.setGameMode(GameMode.SURVIVAL);
     	
