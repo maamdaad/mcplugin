@@ -96,30 +96,34 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     
     @EventHandler
     public void onPlayerClickSign(PlayerInteractEvent event){
-        Player target = event.getPlayer();
-        if(event.getClickedBlock().getType() == Material.OAK_SIGN || event.getClickedBlock().getType() == Material.OAK_WALL_SIGN){
-           
-            Sign sign = (Sign) event.getClickedBlock().getState();
-            
-            if (sign.getLine(0).equalsIgnoreCase("(join)")) {
-            	
-            	joinClass(target, sign.getLine(1));
-            	
-            } else if (sign.getLine(0).equalsIgnoreCase("(leave)")) {
-            	
-            	leaveteam(target);
-            	
-            } else if (sign.getLine(0).equalsIgnoreCase("(levelup)")) {
-            	
-            	levelclass(target);
-            	
-            } else if (sign.getLine(0).equalsIgnoreCase("(start)")) {
-            	
-            	start();
-            	
+    	
+    	if (event.getPlayer() instanceof Player) {
+    		Player target = event.getPlayer();
+            if(event.getClickedBlock().getType() == Material.OAK_SIGN || event.getClickedBlock().getType() == Material.OAK_WALL_SIGN){
+               
+                Sign sign = (Sign) event.getClickedBlock().getState();
+                
+                if (sign.getLine(0).equalsIgnoreCase("(join)")) {
+                	
+                	joinClass(target, sign.getLine(1));
+                	
+                } else if (sign.getLine(0).equalsIgnoreCase("(leave)")) {
+                	
+                	leaveteam(target);
+                	
+                } else if (sign.getLine(0).equalsIgnoreCase("(levelup)")) {
+                	
+                	levelclass(target);
+                	
+                } else if (sign.getLine(0).equalsIgnoreCase("(start)")) {
+                	
+                	start();
+                	
+                }
+                
             }
-            
-        }
+    	}
+
     }
 	
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
