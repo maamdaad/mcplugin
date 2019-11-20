@@ -1,5 +1,8 @@
 package de.craftomania.plugin.MCPlugin;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -8,22 +11,17 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.enchantments.EnchantmentTarget;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.block.*;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-public final class MCPlugin extends JavaPlugin {
+public final class MCPlugin extends JavaPlugin implements Listener {
 
 	HashMap<String, String> teams = new HashMap<String, String>();		
 	HashMap<String, ItemStack[]> inv = new HashMap<String, ItemStack[]>();
@@ -32,12 +30,26 @@ public final class MCPlugin extends JavaPlugin {
 	@Override
     public void onEnable() {
         getLogger().info("MCPlugin an!");
-        
+        Bukkit.getServer().getPluginManager().registerEvents(this, this);
     }
     @Override
     public void onDisable() {
     	getLogger().info("MCPlugin aus!");
         
+    }
+    
+    @EventHandler
+    public void onPlayerClickSign(PlayerInteractEvent event){
+        Player p = event.getPlayer();
+        if(event.getClickedBlock().getType() == Material.OAK_SIGN || event.getClickedBlock().getType() == Material.OAK_WALL_SIGN){
+            p.sendMessage("Sie haben ein Schild angeclickt!!!");
+            Sign sign = (Sign) event.getClickedBlock().getState();
+            
+            p.sendMessage("Line 1: " + sign.getLine(0));
+            p.sendMessage("Line 2: " + sign.getLine(1));
+            p.sendMessage("Line 3: " + sign.getLine(2));
+            p.sendMessage("Line 4: " + sign.getLine(3));
+        }
     }
 	
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
