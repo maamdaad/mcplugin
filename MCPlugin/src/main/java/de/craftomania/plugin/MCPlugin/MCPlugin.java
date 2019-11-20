@@ -60,7 +60,7 @@ public final class MCPlugin extends JavaPlugin {
     private void checkCommand(CommandSender sender, Command cmd, String label, String[] args) {
     	if (args.length > 0) {
     		if (args[0].equalsIgnoreCase("joinclass")) {
-        		if (Bukkit.getServer().getPlayer(args[2]) instanceof Player && teams.get(((Player) sender).getUniqueId().toString()) == null) {
+        		if (teams.get(((Player) sender).getUniqueId().toString()).equals(null)) {
         			String classname = args[1].toLowerCase();
             		String playername = args[2];
             		
@@ -74,7 +74,7 @@ public final class MCPlugin extends JavaPlugin {
     		
     		if (args[0].equalsIgnoreCase("leaveclass")) {
     			
-    			if (Bukkit.getServer().getPlayer(args[1]) instanceof Player && teams.get(((Player) sender).getUniqueId().toString()) != null) { 
+    			if (!teams.get(((Player) sender).getUniqueId().toString()).equals(null)) { 
     			
     				teams.remove(args[1]);
     			
@@ -93,6 +93,13 @@ public final class MCPlugin extends JavaPlugin {
         			sender.sendMessage("Player nicht bekannt oder nicht in Team");
         		}
     		}
+    		
+    		if (args[0].equalsIgnoreCase("inteam")) {
+    			Player target = Bukkit.getServer().getPlayer(args[1]);
+    			
+    			target.sendMessage("Du bist in Team: " + teams.get(target.getUniqueId().toString()));
+    		}
+    		
     	} else {
     		
     	}
