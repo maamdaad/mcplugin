@@ -10,10 +10,12 @@ import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitTask;
 
 public class MobGame {
 	
 	MCPlugin instance;
+	int foodtask;
 	
 	public MobGame(MCPlugin instance) {
 		this.instance = instance;
@@ -34,7 +36,7 @@ public class MobGame {
 			p.teleport(instance.spawn);
 			p.sendMessage("Willkommen in der Arena!");
 			
-			Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(instance, new Runnable() {
+			foodtask = instance.getServer().getScheduler().scheduleSyncRepeatingTask(instance, new Runnable() {
 			    public void run() {
 			    	
 			    	p.getInventory().addItem(new ItemStack(Material.COOKED_PORKCHOP,1));
@@ -137,7 +139,7 @@ public class MobGame {
 	
 	public void stop() {
 		
-		
+		instance.getServer().getScheduler().cancelTask(foodtask);
 		
 	}
 	
