@@ -65,11 +65,7 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     	} else {
     		target.sendMessage("Starte Spiel mit " + teams.size() + " Spielern!");
     		
-    		game = new MobGame(spawnpoints, teams);
-    		
-    		game.setSpawns(lobby, spawn);
-    		
-    		game.setLobbyDoor(lobbydoor);
+    		game = new MobGame(this);
     		
     		game.startGame();
     		
@@ -92,6 +88,13 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 			teams.remove(target.getUniqueId().toString());
 			level.remove(target.getUniqueId().toString());
 			gamemodes.remove(target.getUniqueId().toString());
+			
+			if (teams.size() == 0) {
+				game.stop();
+				
+				game = null;
+			}
+			
 		} else {
 			target.sendMessage("Player nicht in Team");
 		}
@@ -294,9 +297,30 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     			target.sendMessage("Lobbydoor gesetzt.");
     		}
     		
-    	} else {
-    		
+    		if (args[0].equalsIgnoreCase("opendoor")) {
+    			if (game != null) {
+    			
+    				game.openDoor();
+    			
+    			} else {
+    				Player target = (Player) sender;
+    				target.sendMessage("Kein Game initialisiert!");
+    			}
+    		}
+    	
+    		if (args[0].equalsIgnoreCase("closedoor")) {
+    			if (game != null) {
+    			
+    				game.closeDoor();
+    			
+    			} else {
+    				Player target = (Player) sender;
+    				target.sendMessage("Kein Game initialisiert!");
+    			}
+    		}
+    	
     	}
+    	
     }
     
     private int joinClass(Player target, String classname) {
@@ -337,6 +361,12 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     private void levelclass(Player target) {
     	
     	int newlevel = level.get(target.getUniqueId().toString()) + 1;
+    	
+    	if (Klassen.getInstance().MAXLEVEL.get( teams.get(target.getUniqueId().toString()) ) == newlevel) {
+    		target.sendMessage("Du hast das maximale Level erreicht!");
+    		
+    		newlevel--;
+    	}
     	
     	if (teams.get(target.getUniqueId().toString()).equalsIgnoreCase("jaeger")){
     		

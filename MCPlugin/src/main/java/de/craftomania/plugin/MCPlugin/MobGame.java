@@ -6,32 +6,19 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class MobGame {
 	
-	ArrayList<Location> spawnpoints;
-	HashMap<String,String> teams;
+	MCPlugin instance;
 	
-	Location[] lobbydoor;
-	
-	Location spawn;
-	Location lobby;
-	
-	public MobGame(ArrayList<Location> spawnpoints, HashMap<String, String> teams) {
-		this.spawnpoints = spawnpoints;
-		this.teams = teams;
+	public MobGame(MCPlugin instance) {
+		this.instance = instance;
 	}
 	
-	public void setSpawns(Location lobby, Location spawn) {
-		this.lobby = lobby;
-		this.spawn = spawn;
-	}
-	
-	public void setLobbyDoor(Location[] pos) {
-		this.lobbydoor = pos;
-	}
 	
 	private Player getByUUID(String str) {
 		Player p = Bukkit.getServer().getPlayer( UUID.fromString(str) );
@@ -40,19 +27,117 @@ public class MobGame {
 	
 	public void startGame() {
 		
-		for (String key : teams.keySet()) {
+		for (String key : instance.teams.keySet()) {
 			
-			Player p = getByUUID(key);
+			final Player p = getByUUID(key);
 			
-			p.teleport(spawn);
+			p.teleport(instance.spawn);
 			p.sendMessage("Willkommen in der Arena!");
+			
+			Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(instance, new Runnable() {
+			    public void run() {
+			    	
+			    	p.getInventory().addItem(new ItemStack(Material.COOKED_PORKCHOP,1));
+
+			    }
+			}, 5,Klassen.getInstance().food_cooldown[ instance.level.get(p.getUniqueId().toString()) ]);
 		}
 		
-		for (Location loc : spawnpoints) {
+		for (Location loc : instance.spawnpoints) {
 			
 			loc.getWorld().spawnEntity(loc, EntityType.ZOMBIE);
 			
 		}
+		
+	}
+	
+	private int min(int[] arr) {
+		int r = arr[0];
+		
+		for (int i = 0; i < arr.length; i++) {
+			if (r > arr[i]) {
+				r = arr[i];
+			}
+		}
+		
+		return r;
+	}
+	
+	private int max(int[] arr) {
+		int r = arr[0];
+		
+		for (int i = 0; i < arr.length; i++) {
+			if (r < arr[i]) {
+				r = arr[i];
+			}
+		}
+		
+		return r;
+	}
+	
+	public void openDoor() {
+		
+		int i = 0;
+		
+		int[] x = new int[4];
+		int[] y = new int[4];
+		int[] z = new int[4];
+		
+		for (Location loc : instance.lobbydoor) {
+			x[i] = loc.getBlockX();
+			y[i] = loc.getBlockY();
+			z[i] = loc.getBlockZ();
+			
+			i++;
+		}
+		
+		for (int px = min(x); px <= max(x); px++) {
+			for (int py = min(y); py <= max(y); py++) {
+				for (int pz = min(z); pz <= max(z); pz++) {
+					
+					Location loc = new Location(instance.spawn.getWorld(), px, py, pz);
+					
+					instance.spawn.getWorld().getBlockAt(loc).setType(Material.AIR);
+					
+				}
+			}
+		}
+		
+	}
+	
+	public void closeDoor() {
+		
+		int i = 0;
+		
+		int[] x = new int[4];
+		int[] y = new int[4];
+		int[] z = new int[4];
+		
+		for (Location loc : instance.lobbydoor) {
+			x[i] = loc.getBlockX();
+			y[i] = loc.getBlockY();
+			z[i] = loc.getBlockZ();
+			
+			i++;
+		}
+		
+		for (int px = min(x); px <= max(x); px++) {
+			for (int py = min(y); py <= max(y); py++) {
+				for (int pz = min(z); pz <= max(z); pz++) {
+					
+					Location loc = new Location(instance.spawn.getWorld(), px, py, pz);
+					
+					instance.spawn.getWorld().getBlockAt(loc).setType(Material.SPRUCE_FENCE);
+					
+				}
+			}
+		}
+		
+	}
+	
+	public void stop() {
+		
+		
 		
 	}
 	

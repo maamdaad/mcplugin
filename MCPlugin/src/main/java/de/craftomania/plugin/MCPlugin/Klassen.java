@@ -1,6 +1,7 @@
 package de.craftomania.plugin.MCPlugin;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -17,16 +18,15 @@ public class Klassen {
 	
 	private static long ticks = 14;
 	
-	private static int MAXJAEGER = 10;
-	private static int MAXTANK = 10;
+	public static HashMap<String, Integer> MAXLEVEL;
 	
-	public static long[] food_cooldown = {};
+	public static long[] food_cooldown = {ticks * 10, ticks * 10, ticks*10, ticks*7, ticks*7, ticks*6, ticks*6, ticks*5, ticks*5, ticks*5, ticks*4};
 	
-	public static long[] jaeger_bowcooldown = {ticks * 3, ticks * 2, ticks * 2, ticks * 2, ticks * 1, ticks * 1, ticks * 1, ticks * 1};
-	
+	public static long[] jaeger_bowcooldown = {ticks * 3, ticks * 2, ticks * 2, ticks * 2, ticks * 1, ticks * 1, ticks * 1, ticks * 1, ticks * 1, ticks * 1};
 	
 	public Klassen() {
-		
+		MAXLEVEL.put("jaeger", 10);
+		MAXLEVEL.put("tank", 10);
 	}
 	
 	public static Klassen getInstance() {
@@ -91,7 +91,9 @@ public class Klassen {
     		
     		target.sendMessage("Du bist jetzt Jäger Level 2");
     		
-    	}
+    	} else if (level == 2) {
+    		
+    	} 
 		
 		
 	}
