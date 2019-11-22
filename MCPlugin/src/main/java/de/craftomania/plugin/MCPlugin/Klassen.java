@@ -15,6 +15,16 @@ public class Klassen {
 	
 	private static Klassen klassen;
 	
+	private static long ticks = 14;
+	
+	private static int MAXJAEGER = 10;
+	private static int MAXTANK = 10;
+	
+	public static long[] food_cooldown = {};
+	
+	public static long[] jaeger_bowcooldown = {ticks * 3, ticks * 2, ticks * 2, ticks * 2, ticks * 1, ticks * 1, ticks * 1, ticks * 1};
+	
+	
 	public Klassen() {
 		
 	}

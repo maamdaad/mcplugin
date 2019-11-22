@@ -2,13 +2,15 @@ package de.craftomania.plugin.MCPlugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 public class MobGame {
 	
-	ArrayList<Player> player;
 	ArrayList<Location> spawnpoints;
 	HashMap<String,String> teams;
 	
@@ -17,8 +19,7 @@ public class MobGame {
 	Location spawn;
 	Location lobby;
 	
-	public MobGame(ArrayList<Player> player, ArrayList<Location> spawnpoints, HashMap<String, String> teams) {
-		this.player = player;
+	public MobGame(ArrayList<Location> spawnpoints, HashMap<String, String> teams) {
 		this.spawnpoints = spawnpoints;
 		this.teams = teams;
 	}
@@ -32,11 +33,25 @@ public class MobGame {
 		this.lobbydoor = pos;
 	}
 	
+	private Player getByUUID(String str) {
+		Player p = Bukkit.getServer().getPlayer( UUID.fromString(str) );
+		return p;
+	}
+	
 	public void startGame() {
 		
-		for (Player p : player) {
+		for (String key : teams.keySet()) {
+			
+			Player p = getByUUID(key);
+			
 			p.teleport(spawn);
 			p.sendMessage("Willkommen in der Arena!");
+		}
+		
+		for (Location loc : spawnpoints) {
+			
+			loc.getWorld().spawnEntity(loc, EntityType.ZOMBIE);
+			
 		}
 		
 	}

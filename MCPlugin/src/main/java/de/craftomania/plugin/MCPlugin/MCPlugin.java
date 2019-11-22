@@ -40,21 +40,22 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 	Location lobby;
 	Location[] lobbydoor = new Location[4];
 	
-	MobGame game;
-	
-	long ticks = 14;
-	
-	long[] bowcooldown = {ticks * 3, ticks * 2, ticks * 2, ticks * 2, ticks * 1, ticks * 1, ticks * 1, ticks * 1};
+	MobGame game;	
 	
 	@Override
     public void onEnable() {
         getLogger().info("MCPlugin an!");
         Bukkit.getServer().getPluginManager().registerEvents(this, this);
+        
+        // TODO READ CONFIG
+        
     }
     @Override
     public void onDisable() {
     	getLogger().info("MCPlugin aus!");
         
+    	// TODO WRITE CONFIG
+    	
     }
     
     private void start(Player target) {
@@ -64,19 +65,11 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     	} else {
     		target.sendMessage("Starte Spiel mit " + teams.size() + " Spielern!");
     		
-    		ArrayList<Player> player = new ArrayList<Player>();
-    		
-    		for ( String key : teams.keySet() ) {
-    		    
-    			Player p = Bukkit.getServer().getPlayer( UUID.fromString(key) );
-    			
-    			target.sendMessage("Adde Player: " + p.getName());
-    			
-    		}
-    		
-    		game = new MobGame(player, spawnpoints, teams);
+    		game = new MobGame(spawnpoints, teams);
     		
     		game.setSpawns(lobby, spawn);
+    		
+    		game.setLobbyDoor(lobbydoor);
     		
     		game.startGame();
     		
@@ -111,15 +104,31 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     		final Player target = (Player) e.getEntity();
         	
         	if (teams.get( target.getUniqueId().toString() ).equalsIgnoreCase("jaeger")) {
-        		target.sendMessage("Arrow geschossen! Cooldown: " + bowcooldown[ level.get(target.getUniqueId().toString()) ] + " ticks");
+        		target.sendMessage("Arrow geschossen! Cooldown: " + Klassen.getInstance().jaeger_bowcooldown[ level.get(target.getUniqueId().toString()) ] + " ticks");
             	
         		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
         		    public void run() {
         		    	ItemStack a = new ItemStack(Material.ARROW,1);
                     	
-                    	target.getInventory().addItem(a);
+        		    	boolean hatnoch = false;
+        		    	
+          		    	for (ItemStack item : target.getInventory().getContents()) {
+        		    		if (item != null) {
+        		    			if (item.getType().equals(a.getType())) {
+            		    			target.sendMessage("Aha! Du hast noch einen Pfeil du Spasti!");
+            		    			hatnoch = true;
+            		    		}
+        		    		}
+          		    		
+        		    	}
+          		    	
+          		    	if (!hatnoch) {
+          		    		
+          		    		target.getInventory().addItem(a);
+          		    	}
+
         		    }
-        		}, bowcooldown[ level.get(target.getUniqueId().toString()) ]);
+        		}, Klassen.getInstance().jaeger_bowcooldown[ level.get(target.getUniqueId().toString()) ]);
 
         	}
     	}
@@ -281,8 +290,6 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     			lobbydoor[1] = new Location(target.getWorld(), Integer.parseInt(apos2[0]), Integer.parseInt(apos2[1]), Integer.parseInt(apos2[2]));
     			lobbydoor[2] = new Location(target.getWorld(), Integer.parseInt(apos3[0]), Integer.parseInt(apos3[1]), Integer.parseInt(apos3[2]));
     			lobbydoor[3] = new Location(target.getWorld(), Integer.parseInt(apos4[0]), Integer.parseInt(apos4[1]), Integer.parseInt(apos4[2]));
-    			
-    			game.setLobbyDoor(lobbydoor);
     			
     			target.sendMessage("Lobbydoor gesetzt.");
     		}
