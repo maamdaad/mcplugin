@@ -2,8 +2,11 @@ package de.craftomania.plugin.MCPlugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -31,6 +34,14 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 	HashMap<String, Integer> level = new HashMap<String, Integer>();
 	HashMap<String, GameMode> gamemodes = new HashMap<String, GameMode>(); 
 	
+	ArrayList<Location> spawnpoints = new ArrayList<Location>(); 
+	
+	Location spawn;
+	Location lobby;
+	Location[] lobbydoor = new Location[4];
+	
+	MobGame game;
+	
 	long ticks = 14;
 	
 	long[] bowcooldown = {ticks * 3, ticks * 2, ticks * 2, ticks * 2, ticks * 1, ticks * 1, ticks * 1, ticks * 1};
@@ -46,9 +57,30 @@ public final class MCPlugin extends JavaPlugin implements Listener {
         
     }
     
-    private void start() {
+    private void start(Player target) {
     	
-    	
+    	if (teams.size() < 1) {
+    		target.sendMessage("Keine Spieler in Teams");
+    	} else {
+    		target.sendMessage("Starte Spiel mit " + teams.size() + " Spielern!");
+    		
+    		ArrayList<Player> player = new ArrayList<Player>();
+    		
+    		for ( String key : teams.keySet() ) {
+    		    
+    			Player p = Bukkit.getServer().getPlayer( UUID.fromString(key) );
+    			
+    			target.sendMessage("Adde Player: " + p.getName());
+    			
+    		}
+    		
+    		game = new MobGame(player, spawnpoints, teams);
+    		
+    		game.setSpawns(lobby, spawn);
+    		
+    		game.startGame();
+    		
+    	}
     	
     }
     
@@ -126,7 +158,7 @@ public final class MCPlugin extends JavaPlugin implements Listener {
                 	
                 } else if (sign.getLine(0).equalsIgnoreCase("(start)")) {
                 	
-                	start();
+                	start(target);
                 	
                 }
                 
@@ -181,14 +213,78 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     		
     		if (args[0].equalsIgnoreCase("inteam")) {
     			Player target = Bukkit.getServer().getPlayer(args[1]);
+    			Player send = (Player) sender;
     			
-    			target.sendMessage("Du bist in Team: " + teams.get(target.getUniqueId().toString()));
+    			send.sendMessage("Ist in Team: " + teams.get(target.getUniqueId().toString()));
     		}
     		
     		if (args[0].equalsIgnoreCase("inlevel")) {
     			Player target = Bukkit.getServer().getPlayer(args[1]);
+    			Player send = (Player) sender;
     			
-    			target.sendMessage("Du bist in Level: " + level.get(target.getUniqueId().toString()));
+    			send.sendMessage("Ist in Level: " + level.get(target.getUniqueId().toString()));
+    		}
+    		
+    		if (args[0].equalsIgnoreCase("start")) {
+    			Player target = Bukkit.getServer().getPlayer(args[1]);
+    			
+    			start(target);
+    		}
+    		
+    		if (args[0].equalsIgnoreCase("addsp")) {
+    			Player target = (Player) sender;
+    			
+    			spawnpoints.add( target.getLocation() );
+    			
+    			target.sendMessage("Neuer Spawnpoint für Monster bei x=" + target.getLocation().getBlockX() + " y=" + target.getLocation().getBlockY() + " z=" + target.getLocation().getBlockZ());
+    		}
+    		
+    		if (args[0].equalsIgnoreCase("clearsp")) {
+    			Player target = (Player) sender;
+    			
+    			spawnpoints.clear();
+    			
+    			target.sendMessage("Spawnpunkte gelöscht.");
+    		}
+    		
+    		if (args[0].equalsIgnoreCase("setspawn")) {
+    			Player target = (Player) sender;
+    			
+    			spawn = target.getLocation();
+    			
+    			target.sendMessage("Player Spawnpoint bei x=" + target.getLocation().getBlockX() + " y=" + target.getLocation().getBlockY() + " z=" + target.getLocation().getBlockZ());
+    		}
+    		
+    		if (args[0].equalsIgnoreCase("setlobby")) {
+    			Player target = (Player) sender;
+    			
+    			spawn = target.getLocation();
+    			
+    			target.sendMessage("Lobby Spawnpoint bei x=" + target.getLocation().getBlockX() + " y=" + target.getLocation().getBlockY() + " z=" + target.getLocation().getBlockZ());
+    			    			
+    		}
+    		
+    		if (args[0].equalsIgnoreCase("setlobbydoor")){
+    			Player target = (Player) sender;
+    			
+    			String pos1 = args[1];
+    			String pos2 = args[2];
+    			String pos3 = args[3];
+    			String pos4 = args[4];
+    			
+    			String[] apos1 = pos1.split(",");
+    			String[] apos2 = pos2.split(",");
+    			String[] apos3 = pos3.split(",");
+    			String[] apos4 = pos4.split(",");
+    			
+    			lobbydoor[0] = new Location(target.getWorld(), Integer.parseInt(apos1[0]), Integer.parseInt(apos1[1]), Integer.parseInt(apos1[2]));
+    			lobbydoor[1] = new Location(target.getWorld(), Integer.parseInt(apos2[0]), Integer.parseInt(apos2[1]), Integer.parseInt(apos2[2]));
+    			lobbydoor[2] = new Location(target.getWorld(), Integer.parseInt(apos3[0]), Integer.parseInt(apos3[1]), Integer.parseInt(apos3[2]));
+    			lobbydoor[3] = new Location(target.getWorld(), Integer.parseInt(apos4[0]), Integer.parseInt(apos4[1]), Integer.parseInt(apos4[2]));
+    			
+    			game.setLobbyDoor(lobbydoor);
+    			
+    			target.sendMessage("Lobbydoor gesetzt.");
     		}
     		
     	} else {
