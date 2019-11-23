@@ -176,34 +176,64 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     
     @EventHandler
     private void onEntityDeath(EntityDeathEvent event) {
+    	
+    	getLogger().info("Player Death!!!!");
+    	
     	if (game != null) {
+    		
     		if (event.getEntity().getLocation().getWorld().equals(spawn.getWorld())) {
     			
-    			if (teams.get( event.getEntity().getKiller().getUniqueId().toString() ) != null) {
+    			Player target = null;
+    			
+    			try {
+    				target = (Player) event.getEntity().getKiller();
+    			} catch (Exception e) {
+    				target = null;
+    			}
+    			
+    			if (target != null) {
     				
-    				long currscore = score.get( event.getEntity().getKiller().getUniqueId().toString() );
+    				if (teams.get( target.getUniqueId().toString() ) != null) {
+        				
+        				long currscore = score.get( target.getUniqueId().toString() );
+        				
+        				if (event.getEntityType().equals(EntityType.ZOMBIE)) {
+        					
+        					currscore += 1;
+        					
+        					game.skeletoncount--;
+        					
+        					target.sendMessage("Du hast +1 Score, aktueller Score " + score);
+        					
+        				}
+        				
+        				if (event.getEntityType().equals(EntityType.SKELETON)) {
+        					
+        					currscore += 1;
+        					
+        					game.zombiecount--;
+        					
+        					target.sendMessage("Du hast +1 Score, aktueller Score " + score);
+        					
+        				}
+        				
+        				score.put(target.getUniqueId().toString(), currscore);
+        			}
+    				
+    			} else {
     				
     				if (event.getEntityType().equals(EntityType.ZOMBIE)) {
     					
-    					currscore += 1;
-    					
     					game.skeletoncount--;
-    					
-    					event.getEntity().getKiller().sendMessage("Du hast +1 Score, aktueller Score " + score);
     					
     				}
     				
     				if (event.getEntityType().equals(EntityType.SKELETON)) {
     					
-    					currscore += 1;
-    					
     					game.zombiecount--;
     					
-    					event.getEntity().getKiller().sendMessage("Du hast +1 Score, aktueller Score " + score);
     					
     				}
-    				
-    				score.put(event.getEntity().getKiller().getUniqueId().toString(), currscore);
     			}
     			
     		}
@@ -285,41 +315,44 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerClickSign(PlayerInteractEvent event){
     	
-    	if (event.getPlayer() instanceof Player) {
-    		Player target = event.getPlayer();
-            if(event.getClickedBlock().getType() == Material.OAK_SIGN || event.getClickedBlock().getType() == Material.OAK_WALL_SIGN){
-               
-                Sign sign = (Sign) event.getClickedBlock().getState();
-                
-                if (sign.getLine(0).equalsIgnoreCase("(join)")) {
-                	
-                	
-                	if (teams.get(target.getUniqueId().toString()) == null) {
-            			joinClass(target, sign.getLine(1));
-            		} else {
-            			target.sendMessage("Player schon in Team");
-            		}
-                	
-                	
-                } else if (sign.getLine(0).equalsIgnoreCase("(leave)")) {
-                	
-                	leaveteam(target);
-                	
-                } else if (sign.getLine(0).equalsIgnoreCase("(levelup)")) {
-                	
-                	if (teams.get(target.getUniqueId().toString()) != null) {
-                		levelclass(target);
-            		} else {
-            			target.sendMessage("Player nicht in Team");
-            		}
-                	
-                } else if (sign.getLine(0).equalsIgnoreCase("(start)")) {
-                	
-                	start(target);
-                	
+    	if (event != null) {
+    		if (event.getPlayer() != null) {
+    			Player target = event.getPlayer();
+                if(event.getClickedBlock().getType() == Material.OAK_SIGN || event.getClickedBlock().getType() == Material.OAK_WALL_SIGN){
+                   
+                    Sign sign = (Sign) event.getClickedBlock().getState();
+                    
+                    if (sign.getLine(0).equalsIgnoreCase("(join)")) {
+                    	
+                    	
+                    	if (teams.get(target.getUniqueId().toString()) == null) {
+                			joinClass(target, sign.getLine(1));
+                		} else {
+                			target.sendMessage("Player schon in Team");
+                		}
+                    	
+                    	
+                    } else if (sign.getLine(0).equalsIgnoreCase("(leave)")) {
+                    	
+                    	leaveteam(target);
+                    	
+                    } else if (sign.getLine(0).equalsIgnoreCase("(levelup)")) {
+                    	
+                    	if (teams.get(target.getUniqueId().toString()) != null) {
+                    		levelclass(target);
+                		} else {
+                			target.sendMessage("Player nicht in Team");
+                		}
+                    	
+                    } else if (sign.getLine(0).equalsIgnoreCase("(start)")) {
+                    	
+                    	start(target);
+                    	
+                    }
+                    
                 }
-                
-            }
+    		}
+    		
     	}
 
     }
@@ -483,6 +516,7 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     	
 		teams.put(target.getUniqueId().toString(), classname);
 		this.level.put(target.getUniqueId().toString(), 0);
+		score.put(target.getUniqueId().toString(), 0L);
 		
     	switch (classname) {
 		case "jaeger":

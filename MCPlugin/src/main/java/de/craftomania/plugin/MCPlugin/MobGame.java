@@ -40,7 +40,7 @@ public class MobGame {
 					zom.setCustomName("TELEKOM!!");
 					zom.getEquipment().setHelmet(new ItemStack(Material.LEATHER_HELMET,1));
 					
-					zombiecount += instance.spawnpoints.size();
+					zombiecount ++;
 					
 				}
 			} else {
@@ -63,7 +63,7 @@ public class MobGame {
 					ent.setCustomName("TELEKOM");
 					ent.getEquipment().setHelmet(new ItemStack(Material.LEATHER_HELMET,1));				
 					
-					skeletoncount++;
+					skeletoncount ++;
 					
 				}
 			} else {
