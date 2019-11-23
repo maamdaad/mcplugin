@@ -29,6 +29,8 @@ public class MobGame {
 	int currlevel = 0;
 	boolean roundrunning = false;
 	
+	ArrayList<BukkitRunnable> foodList = new ArrayList<BukkitRunnable>();
+	
 	BukkitRunnable spawnz = new BukkitRunnable() {
 		
 		@Override
@@ -122,12 +124,28 @@ public class MobGame {
 			rfood = new BukkitRunnable() {
 			    public void run() {
 			    	
-			    	p.getInventory().addItem(new ItemStack(Material.COOKED_PORKCHOP,1));
+			    	boolean hatnoch = false;
+    		    	
+      		    	for (ItemStack item : p.getInventory().getContents()) {
+    		    		if (item != null) {
+    		    			if (item.getType().equals(new ItemStack(Material.COOKED_PORKCHOP,5).getType())) {
+        		    			hatnoch = true;
+        		    		}
+    		    		}
+      		    		
+    		    	}
+      		    	
+      		    	if (!hatnoch) {
+      		    		
+      		    		p.getInventory().addItem(new ItemStack(Material.COOKED_PORKCHOP,1));
+      		    	}
 			    	
 			    }
 			};
 			
 			rfood.runTaskTimer(instance, 5,Klassen.getInstance().food_cooldown[ instance.level.get(p.getUniqueId().toString()) ]);
+			
+			foodList.add(rfood);
 		}
 		
 		rmobs = new BukkitRunnable() {
@@ -269,6 +287,10 @@ public class MobGame {
 		spawns.cancel();
 		spawnz.cancel();
 		od.cancel();
+		
+		for (BukkitRunnable r : foodList) {
+			r.cancel();
+		}
 		
 		rfood = null;
 		rmobs = null;

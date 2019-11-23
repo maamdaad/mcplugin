@@ -22,6 +22,8 @@ public class Klassen {
 	
 	public static long[] food_cooldown = {ticks * 10, ticks * 10, ticks*10, ticks*7, ticks*7, ticks*6, ticks*6, ticks*5, ticks*5, ticks*5, ticks*4};
 	
+	public static long MAX_food = 5;
+	
 	public static long[] jaeger_bowcooldown = {ticks * 3, ticks * 2, ticks * 2, ticks * 2, ticks * 1, ticks * 1, ticks * 1, ticks * 1, ticks * 1, ticks * 1};
 	
 	public Klassen() {
