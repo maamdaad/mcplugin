@@ -1,13 +1,22 @@
 package de.craftomania.plugin.MCPlugin;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Properties;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.command.Command;
@@ -47,15 +56,104 @@ public final class MCPlugin extends JavaPlugin implements Listener {
         getLogger().info("MCPlugin an!");
         Bukkit.getServer().getPluginManager().registerEvents(this, this);
         
-        // TODO READ CONFIG
+        
+        BukkitRunnable run = new BukkitRunnable() {
+			
+			@Override
+			public void run() {
+				Properties prop = new Properties();
+		        
+		        InputStream input;
+				try {
+					input = new FileInputStream("arena.properties");
+					prop.load(input);
+					getLogger().info("Properties File reading...");
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		        
+		        World w = Bukkit.getServer().getWorld(prop.getProperty("world"));
+		        getLogger().info("Loaded Prop World " + w.getName());        
+		        
+		        String tmp = prop.getProperty("spawn");
+		        String[] atmp = tmp.split(",");
+		        spawn = new Location(w, Integer.parseInt(atmp[0]), Integer.parseInt(atmp[1]), Integer.parseInt(atmp[2]));
+		        getLogger().info("Loaded Prop Spawn " + spawn.getBlockX() + "," + spawn.getBlockY() + "," + spawn.getBlockZ());
+		        
+		        tmp = prop.getProperty("lobby");
+		        atmp = tmp.split(",");
+		        lobby = new Location(w, Integer.parseInt(atmp[0]), Integer.parseInt(atmp[1]), Integer.parseInt(atmp[2]));
+		        getLogger().info("Loaded Prop Lobby " + lobby.getBlockX() + "," + lobby.getBlockY() + "," + lobby.getBlockZ());
+		        
+		        for (int i = 0; i < lobbydoor.length; i++) {
+		        	tmp = prop.getProperty("lobbydoor" + i);
+		            atmp = tmp.split(",");
+		        	
+		            lobbydoor[i] = new Location(w, Integer.parseInt(atmp[0]), Integer.parseInt(atmp[1]), Integer.parseInt(atmp[2]));
+		            getLogger().info("Loaded Prop Lobbydoor" + i + " " + lobbydoor[0].getBlockX() + ","+ lobbydoor[0].getBlockY() + ","+ lobbydoor[0].getBlockZ());
+		        	
+		        }
+		               
+		        int max = Integer.parseInt(prop.getProperty("spawnpoints"));
+		        getLogger().info("Loaded Prop Spawnpoints " + max);
+		        
+		        for (int i = 0; i < max; i++) {
+		        	tmp = prop.getProperty("spawnpoint" + i);
+		            atmp = tmp.split(",");
+		            
+		            spawnpoints.add(new Location(w, Integer.parseInt(atmp[0]), Integer.parseInt(atmp[1]), Integer.parseInt(atmp[2])));
+		            getLogger().info("Loaded Prop Spawnpoint" + i + " " + spawnpoints.get(i).getBlockX() + "," + spawnpoints.get(i).getBlockY() + "," + spawnpoints.get(i).getBlockZ());
+		        }
+		        
+		        getLogger().info("Loaded all Props!");
+			}
+		};
+		
+		run.runTaskLater(this, 1L);
+        
         
     }
     @Override
     public void onDisable() {
     	getLogger().info("MCPlugin aus!");
         
-    	// TODO WRITE CONFIG
-    	
+    	Properties prop = new Properties();
+    	World world = spawn.getWorld();
+        prop.setProperty("world", world.getName());
+        getLogger().info("Set Prop World " + world.getName());
+        prop.setProperty("spawn", spawn.getBlockX() + "," + spawn.getBlockY() + "," + spawn.getBlockZ());
+        getLogger().info("Set Prop Spawn " + spawn.getBlockX() + "," + spawn.getBlockY() + "," + spawn.getBlockZ() );
+        prop.setProperty("lobby", lobby.getBlockX() + "," + lobby.getBlockY() + "," + lobby.getBlockZ());
+        getLogger().info("Set Prop Lobby " + lobby.getBlockX() + "," + lobby.getBlockY() + "," + lobby.getBlockZ());
+        
+        for (int i = 0; i < lobbydoor.length; i++) {
+        	prop.setProperty("lobbydoor" + i, lobbydoor[i].getBlockX() + "," + lobbydoor[i].getBlockY() + "," + lobbydoor[i].getBlockZ());
+        	getLogger().info("Set Prop Lobbydoor" + i + " " + lobbydoor[i].getBlockX() + "," + lobbydoor[i].getBlockY() + "," + lobbydoor[i].getBlockZ());
+        }
+        
+        int i = 0;
+        
+        prop.setProperty("spawnpoints", spawnpoints.size() + "");
+        getLogger().info("Set Prop Spawnpoints " + spawnpoints.size());
+        
+        for (Location loc : spawnpoints) {
+        	prop.setProperty("spawnpoint" + i, loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
+        	getLogger().info("Set Prop Spawnpoint" + i + " " + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
+        	i++;
+        }
+        
+        try {
+			prop.store(new FileOutputStream("arena.properties"), null);
+			getLogger().info("Properties saved!");			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
     }
     
     private void start(Player target) {
@@ -270,7 +368,7 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     		if (args[0].equalsIgnoreCase("setlobby")) {
     			Player target = (Player) sender;
     			
-    			spawn = target.getLocation();
+    			lobby = target.getLocation();
     			
     			target.sendMessage("Lobby Spawnpoint bei x=" + target.getLocation().getBlockX() + " y=" + target.getLocation().getBlockY() + " z=" + target.getLocation().getBlockZ());
     			    			
