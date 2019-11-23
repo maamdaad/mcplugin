@@ -21,16 +21,29 @@ public class MobGame {
 	static long ticks = 14;
 	static long[] INTERVALS = {5*ticks, 5*ticks, 4*ticks, 4*ticks, 3*ticks, 3*ticks};
 	static int[] COUNTS = {10, 10, 20, 20, 30, 30};
+	int zombiecount = 0;
+	int skeletoncount = 0;
+	int currlevel = 0;
 	
 	BukkitRunnable spawnz = new BukkitRunnable() {
 		
 		@Override
 		public void run() {
-			for (Location loc : instance.spawnpoints) {
+			if (zombiecount < COUNTS[currlevel]) {
+				for (Location loc : instance.spawnpoints) {
+					
+					loc.getWorld().spawnEntity(loc, EntityType.ZOMBIE);
+					
+					zombiecount++;
+					
+				}
+			} else {
 				
-				loc.getWorld().spawnEntity(loc, EntityType.ZOMBIE);
+				zombiecount = 0;
 				
+				this.cancel();
 			}
+			
 			
 		}
 	};
@@ -39,11 +52,22 @@ public class MobGame {
 		
 		@Override
 		public void run() {
-			for (Location loc : instance.spawnpoints) {
+			if (skeletoncount < COUNTS[currlevel]) {
+				for (Location loc : instance.spawnpoints) {
+					
+					loc.getWorld().spawnEntity(loc, EntityType.SKELETON);
+					
+					skeletoncount++;
+					
+				}
+			} else {
 				
-				loc.getWorld().spawnEntity(loc, EntityType.SKELETON);
+				skeletoncount = 0;
+				
+				this.cancel();
 				
 			}
+			
 			
 		}
 	};
@@ -111,15 +135,13 @@ public class MobGame {
 		closeDoor();
 		
 		broadcast( (level + 1) +  ". Runde startet!");
-		
-		for (int i = 0; i < COUNTS[level]; i+=2) {
-		    
+		   
+		currlevel = level;
 			
-			spawnz.runTaskLater(instance, (long) INTERVALS[level] * i);
+		spawnz.runTaskTimer(instance, 0, (long) INTERVALS[level]);
 			
-			spawns.runTaskLater(instance, (long) INTERVALS[level] * i);
-		    	
-		}
+		spawns.runTaskTimer(instance, 0, (long) INTERVALS[level]);
+
 				
 		od.runTaskLater(instance, INTERVALS[level] * COUNTS.length);
 		
