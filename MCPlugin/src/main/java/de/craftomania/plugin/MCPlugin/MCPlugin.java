@@ -207,6 +207,14 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     			}
     			
     		}
+    		
+    		if (event.getEntity() instanceof Player) {
+    			if (teams.get( event.getEntity().getUniqueId().toString() ) != null) {
+    				
+    				event.getEntity().teleport(spawn);
+    				
+    			}
+    		}
     	}
     }
     
