@@ -143,7 +143,7 @@ public class MobGame {
 		openDoor();
 		broadcast("Das Tor geht gleich zu!");
 		
-		rmobs.runTaskLater(instance, 50);
+		rmobs.runTaskLater(instance, 20);
 		
 	}
 	
