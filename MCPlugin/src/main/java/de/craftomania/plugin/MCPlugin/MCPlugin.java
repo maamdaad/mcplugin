@@ -23,9 +23,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
@@ -42,6 +44,7 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 	HashMap<String, ItemStack[]> arm = new HashMap<String, ItemStack[]>();
 	HashMap<String, Integer> level = new HashMap<String, Integer>();
 	HashMap<String, GameMode> gamemodes = new HashMap<String, GameMode>(); 
+	HashMap<String, Long> score = new HashMap<String, Long>();
 	
 	ArrayList<Location> spawnpoints = new ArrayList<Location>(); 
 	
@@ -169,6 +172,42 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     		
     	}
     	
+    }
+    
+    @EventHandler
+    private void onEntityDeath(EntityDeathEvent event) {
+    	if (game != null) {
+    		if (event.getEntity().getLocation().getWorld().equals(spawn.getWorld())) {
+    			
+    			if (teams.get( event.getEntity().getKiller().getUniqueId().toString() ) != null) {
+    				
+    				long currscore = score.get( event.getEntity().getKiller().getUniqueId().toString() );
+    				
+    				if (event.getEntityType().equals(EntityType.ZOMBIE)) {
+    					
+    					currscore += 1;
+    					
+    					game.skeletoncount--;
+    					
+    					event.getEntity().getKiller().sendMessage("Du hast +1 Score, aktueller Score " + score);
+    					
+    				}
+    				
+    				if (event.getEntityType().equals(EntityType.SKELETON)) {
+    					
+    					currscore += 1;
+    					
+    					game.zombiecount--;
+    					
+    					event.getEntity().getKiller().sendMessage("Du hast +1 Score, aktueller Score " + score);
+    					
+    				}
+    				
+    				score.put(event.getEntity().getKiller().getUniqueId().toString(), currscore);
+    			}
+    			
+    		}
+    	}
     }
     
     private void leaveteam(Player target) {

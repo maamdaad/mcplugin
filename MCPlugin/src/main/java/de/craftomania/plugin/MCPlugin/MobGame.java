@@ -7,8 +7,12 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -24,6 +28,7 @@ public class MobGame {
 	int zombiecount = 0;
 	int skeletoncount = 0;
 	int currlevel = 0;
+	boolean roundrunning = false;
 	
 	BukkitRunnable spawnz = new BukkitRunnable() {
 		
@@ -32,14 +37,14 @@ public class MobGame {
 			if (zombiecount < COUNTS[currlevel]) {
 				for (Location loc : instance.spawnpoints) {
 					
-					loc.getWorld().spawnEntity(loc, EntityType.ZOMBIE);
+					Zombie zom = (Zombie) loc.getWorld().spawnEntity(loc, EntityType.ZOMBIE);
+					zom.setCustomName("TELEKOM!!");
+					zom.getEquipment().setHelmet(new ItemStack(Material.LEATHER_HELMET,1));
 					
-					zombiecount++;
+					zombiecount += instance.spawnpoints.size();
 					
 				}
 			} else {
-				
-				zombiecount = 0;
 				
 				this.cancel();
 			}
@@ -55,14 +60,14 @@ public class MobGame {
 			if (skeletoncount < COUNTS[currlevel]) {
 				for (Location loc : instance.spawnpoints) {
 					
-					loc.getWorld().spawnEntity(loc, EntityType.SKELETON);
+					Skeleton ent = (Skeleton) loc.getWorld().spawnEntity(loc, EntityType.SKELETON);
+					ent.setCustomName("TELEKOM");
+					ent.getEquipment().setHelmet(new ItemStack(Material.LEATHER_HELMET,1));				
 					
 					skeletoncount++;
 					
 				}
 			} else {
-				
-				skeletoncount = 0;
 				
 				this.cancel();
 				
@@ -76,7 +81,22 @@ public class MobGame {
 		
 		@Override
 		public void run() {
-			openDoor();
+			if (roundrunning) {
+				
+				broadcast("Noch " + zombiecount + " Zombies und " + skeletoncount + " Skeletons!");
+				
+				if (zombiecount == 0 || skeletoncount == 0) {
+					roundrunning = false;
+					broadcast("Runde vorbei!");
+				}
+				
+			} else {
+				openDoor();
+				
+				broadcast("Runde ist vorbei! Alle Viecher tot!");
+				
+				this.cancel();
+			}
 			
 		}
 	};
@@ -135,15 +155,16 @@ public class MobGame {
 		closeDoor();
 		
 		broadcast( (level + 1) +  ". Runde startet!");
+		
+		roundrunning = true;
 		   
 		currlevel = level;
 			
 		spawnz.runTaskTimer(instance, 0, (long) INTERVALS[level]);
 			
 		spawns.runTaskTimer(instance, 0, (long) INTERVALS[level]);
-
-				
-		od.runTaskLater(instance, INTERVALS[level] * COUNTS.length);
+		
+		od.runTaskTimer(instance, INTERVALS[level] * COUNTS.length, 30);
 		
 	}
 	
