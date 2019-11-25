@@ -229,11 +229,69 @@ public class Klassen {
     		
     		target.sendMessage("Du bist jetzt Tank Level 10");
     		
-    	} else if (level == 1) {
-    		
-    		target.sendMessage("Du bist jetzt Tank Level 2");
-    		
-    	} 
+    	}
+		
+	}
+	
+	public void healer(int level, Player target) {
+		
+		if (level == 0) {
+			
+			
+			
+			target.sendMessage("Inventar übertragen!");
+			target.sendMessage("Du bist jetzt in der Klasse Healer");
+			
+		} else if (level == 1) {
+			
+			target.sendMessage("Du bist jetzt Healer Level 2");
+			
+		} else if (level == 2) {
+
+			target.sendMessage("Du bist jetzt Healer Level 2");
+			
+		} else if (level == 3) {
+
+			target.sendMessage("Du bist jetzt Healer Level 2");
+			
+		} else if (level == 4) {
+
+			target.sendMessage("Du bist jetzt Healer Level 2");
+			
+		} else if (level == 5) {
+
+			target.sendMessage("Du bist jetzt Healer Level 2");
+			
+		} else if (level == 6) {
+
+			target.sendMessage("Du bist jetzt Healer Level 2");
+			
+		} else if (level == 7) {
+
+			target.sendMessage("Du bist jetzt Healer Level 2");
+			
+		} else if (level == 8) {
+
+			target.sendMessage("Du bist jetzt Healer Level 2");
+			
+		} else if (level == 9) {
+
+			target.sendMessage("Du bist jetzt Healer Level 2");
+			
+		} 
+		
+	}
+	
+	public void mage(int level, Player target) {
+		
+	}
+	
+	public void alchemist(int level, Player target) {
+		
+	}
+	
+	public void assasin(int level, Player target) {
+		
 	}
 	
 	

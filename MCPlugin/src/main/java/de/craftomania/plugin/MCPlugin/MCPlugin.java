@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.Properties;
 import java.util.UUID;
 
+import javax.accessibility.AccessibleAction;
+
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -27,6 +29,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -177,8 +180,6 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     @EventHandler
     private void onEntityDeath(EntityDeathEvent event) {
     	
-    	getLogger().info("Player Death!!!!");
-    	
     	if (game != null) {
     		
     		if (event.getEntity().getLocation().getWorld().equals(spawn.getWorld())) {
@@ -282,8 +283,7 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     		final Player target = (Player) e.getEntity();
         	
         	if (teams.get( target.getUniqueId().toString() ).equalsIgnoreCase("jaeger")) {
-        		target.sendMessage("Arrow geschossen! Cooldown: " + Klassen.getInstance().jaeger_bowcooldown[ level.get(target.getUniqueId().toString()) ] + " ticks");
-            	
+        		
         		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
         		    public void run() {
         		    	ItemStack a = new ItemStack(Material.ARROW,1);
@@ -302,7 +302,7 @@ public final class MCPlugin extends JavaPlugin implements Listener {
           		    	
           		    	if (!hatnoch) {
           		    		
-          		    		target.getInventory().addItem(a);
+          		    		target.getInventory().setItem(8, a);
           		    	}
 
         		    }
@@ -313,10 +313,33 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     }
     
     @EventHandler
+    public void onPlayerUse(PlayerInteractEvent event) {
+    	if (event != null ) {
+    		if (event.getPlayer() != null && (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK))) {
+    			Player target = event.getPlayer();
+    			
+    			if (target.getItemInHand().equals(new ItemStack(Material.STICK, 1))) {
+    				
+    				target.sendMessage("SOS STICKOLO!");
+    				
+    			} else if (target.getItemInHand().equals(new ItemStack(Material.BLAZE_ROD,1))) {
+    				
+    				target.sendMessage("SOS BLAZZE");
+    				
+    			} else if (target.getItemInHand().equals(new ItemStack(Material.CARROT_ON_A_STICK,1))) {
+    				
+    				target.sendMessage("SOS KAKAROTTI");
+    				
+    			}
+    		}
+    	}
+    }
+    
+    @EventHandler
     public void onPlayerClickSign(PlayerInteractEvent event){
     	
     	if (event != null) {
-    		if (event.getPlayer() != null) {
+    		if (event.getPlayer() != null && event.getClickedBlock() != null) { 
     			Player target = event.getPlayer();
                 if(event.getClickedBlock().getType() == Material.OAK_SIGN || event.getClickedBlock().getType() == Material.OAK_WALL_SIGN){
                    
@@ -348,13 +371,138 @@ public final class MCPlugin extends JavaPlugin implements Listener {
                     	
                     	start(target);
                     	
+                    } else if (sign.getLine(0).contentEquals("(chooselevel)")){
+                    	
+                    	getLogger().info("In chooselevel!");
+                    	
+                    	if (lobby.getWorld().getBlockAt( sign.getX()+1, sign.getY(), sign.getZ() ).getType().equals(Material.AIR) || lobby.getWorld().getBlockAt( sign.getX()-1, sign.getY(), sign.getZ() ).getType().equals(Material.AIR)) {
+                    		
+	                    	showlevelscreen(target, sign.getX(), sign.getX(), sign.getY()-1, sign.getY()+1, sign.getZ()-1, sign.getZ()+1, sign);
+                    		
+                    	}
+                    	
+                    	if (lobby.getWorld().getBlockAt(  sign.getX(), sign.getY(), sign.getZ()+1 ).getType().equals(Material.AIR) || lobby.getWorld().getBlockAt(  sign.getX(), sign.getY(), sign.getZ()-1 ).getType().equals(Material.AIR)) {
+                    		
+                    		showlevelscreen(target, sign.getX()-1, sign.getX()+1, sign.getY()-1, sign.getY()+1, sign.getZ(), sign.getZ(), sign);
+                    		
+                    	}
                     }
                     
-                }
+                } 
     		}
     		
     	}
 
+    }
+    
+    private void showlevelscreen(Player target, int minx, int maxx, int miny, int maxy, int minz, int maxz, Sign sign) {
+    	
+    	int signindex = 0;
+    	
+    	for (int py = maxy; py >= miny; py--) {
+    		for (int pz = minz; pz <= maxz; pz++) {
+    			for (int px = minx; px <= maxx; px++) {
+    			
+    			
+    				
+        			if (signindex == 0) {
+        				
+        				if (editSign(px, py, pz, sign, "Alte Eigenschaft", "|", "\\/", "")) {
+        					signindex++;
+        				}
+        				
+        			} else if (signindex == 1) {
+        				
+        				if (editSign(px, py, pz, sign, "Du bist auf", "Level " + (level.get(target.getUniqueId().toString()) + 1) + "", "aufgestiegen", "-------------")) {
+        					signindex++;
+        				}
+        				
+        			} else if (signindex == 2) {
+        				
+        				if (editSign(px, py, pz, sign, "Neue Eigenschaft", "|", "\\/", "")) {
+        					signindex++;
+        				}
+        				
+        			} else if (signindex == 3) {
+        				
+        				if (teams.get(target.getUniqueId().toString()).equalsIgnoreCase("jaeger")) {
+        					
+        					if (editSign(px, py, pz, sign, "Pfeilcooldown", "", Klassen.getInstance().jaeger_bowcooldown[level.get(target.getUniqueId().toString())] + " Ticks", "")) {
+            					signindex++;
+            				}
+        					
+        				}
+        			
+        			} else if (signindex == 4) {
+        				
+        				// Mittleres Schild...
+        				
+        				signindex++;
+        				
+        			} else if (signindex == 5) {
+        				
+        				if (teams.get(target.getUniqueId().toString()).equalsIgnoreCase("jaeger")) {
+        					
+        					if (editSign(px, py, pz, sign, "Pfeilcooldown", "", (Klassen.getInstance().jaeger_bowcooldown[level.get(target.getUniqueId().toString())+1]) + " Ticks", "")) {
+            					signindex++;
+            				}
+        					
+        				}
+        				
+        			} else if (signindex == 6) {
+        				
+        				if (teams.get(target.getUniqueId().toString()).equalsIgnoreCase("jaeger")) {
+        					
+        					if (editSign(px, py, pz, sign, "(applylevel)", "Rüstung", "", "")) {
+            					signindex++;
+            				}
+        					
+        				}
+        				
+        			} else if (signindex == 7) {
+        				
+        				if (teams.get(target.getUniqueId().toString()).equalsIgnoreCase("jaeger")) {
+        					
+        					if (editSign(px, py, pz, sign, "<<<<<<<<<<<<", "Wähle ein", "Upgrade", ">>>>>>>>>>>>")) {
+            					signindex++;
+            				}
+        					
+        				}
+        				
+        			} else if (signindex == 8) {
+        				
+        				if (teams.get(target.getUniqueId().toString()).equalsIgnoreCase("jaeger")) {
+        					
+        					if (editSign(px, py, pz, sign, "(applylevel)", "Bogen", "", "")) {
+            					signindex++;
+            				}
+        					
+        				}
+        				
+        			}
+    				
+    			}
+            }
+        }
+    	
+    }
+    
+    private boolean editSign(int px, int py, int pz, Sign sign, String msg0, String msg1, String msg2, String msg3) {
+    	Block block = lobby.getWorld().getBlockAt(px, py, pz);
+    	
+		if (block.getState() instanceof Sign && !(px == sign.getX() && py == sign.getY() && py == sign.getZ())) {
+			Sign tmp = (Sign) block.getState();
+			
+			tmp.setLine(0, msg0);
+			tmp.setLine(1, msg1);
+			tmp.setLine(2, msg2);
+			tmp.setLine(3, msg3);
+			tmp.update(true);
+			
+			return true;
+		}
+		
+		return false;
     }
 	
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
