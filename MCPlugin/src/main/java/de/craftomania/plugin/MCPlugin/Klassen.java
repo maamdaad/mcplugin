@@ -3,6 +3,7 @@ package de.craftomania.plugin.MCPlugin;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -26,6 +27,8 @@ public class Klassen {
 	
 	public static long[] jaeger_bowcooldown = {ticks * 3, ticks * 2, ticks * 2, ticks * 2, ticks * 1, ticks * 1, ticks * 1, ticks * 1, ticks * 1, ticks * 1};
 	
+	public static int[] jager_score = {0, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+	
 	public Klassen() {
 		MAXLEVEL = new HashMap<String, Integer>();
 		
@@ -40,7 +43,45 @@ public class Klassen {
 		return Klassen.klassen;
 	}
 	
-	public void jaeger(int level, Player target) {
+	public int[] jaegerMeta(Player target, String meta) {
+		
+		String[] atmp = meta.split(",");
+		
+		int rlevel = 0;
+		int blevel = 0;
+		
+		for (String s : atmp) {
+			
+			if (s.contains("r:")) {
+				
+				rlevel = Integer.parseInt(s.split(":")[1]);
+				
+			} else if (s.contains("b:")) {
+				
+				blevel = Integer.parseInt(s.split(":")[1]);
+				
+			}
+			
+		}
+		
+		int[] ret = {rlevel, blevel};
+		
+		return ret;
+	}
+	
+	public void jaeger(int level, Player target, String meta) {
+		
+		int rlevel = jaegerMeta(target, meta)[0];
+		int blevel = jaegerMeta(target, meta)[1];
+		
+		if (blevel == 1) {
+			target.sendMessage("1.BogenStufe");
+		}
+		
+		if (rlevel == 1) {
+			target.sendMessage("1.RüstungsStufe");
+		}
+		
 		if (level == 0) {
 	   		
     		ItemStack boots = new ItemStack(Material.LEATHER_BOOTS, 1);
@@ -132,7 +173,7 @@ public class Klassen {
 		
 	}
 	
-	public void tank(int level, Player target) {
+	public void tank(int level, Player target, String meta) {
 		if (level == 0) {
 			
 			ItemStack boots = new ItemStack(Material.IRON_BOOTS,1);
@@ -233,7 +274,7 @@ public class Klassen {
 		
 	}
 	
-	public void healer(int level, Player target) {
+	public void healer(int level, Player target, String meta) {
 		
 		if (level == 0) {
 			
@@ -282,15 +323,15 @@ public class Klassen {
 		
 	}
 	
-	public void mage(int level, Player target) {
+	public void mage(int level, Player target, String meta) {
 		
 	}
 	
-	public void alchemist(int level, Player target) {
+	public void alchemist(int level, Player target, String meta) {
 		
 	}
 	
-	public void assasin(int level, Player target) {
+	public void assasin(int level, Player target, String meta) {
 		
 	}
 	

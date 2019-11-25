@@ -48,6 +48,7 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 	HashMap<String, Integer> level = new HashMap<String, Integer>();
 	HashMap<String, GameMode> gamemodes = new HashMap<String, GameMode>(); 
 	HashMap<String, Long> score = new HashMap<String, Long>();
+	HashMap<String, String> meta = new HashMap<String, String>();
 	
 	ArrayList<Location> spawnpoints = new ArrayList<Location>(); 
 	
@@ -186,6 +187,8 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     			
     			Player target = null;
     			
+    			event.getDrops().clear();
+    			
     			try {
     				target = (Player) event.getEntity().getKiller();
     			} catch (Exception e) {
@@ -204,7 +207,7 @@ public final class MCPlugin extends JavaPlugin implements Listener {
         					
         					game.skeletoncount--;
         					
-        					target.sendMessage("Du hast +1 Score, aktueller Score " + score);
+        					target.sendTitle("","Du hast +1 Score, aktueller Score " + currscore);
         					
         				}
         				
@@ -214,7 +217,7 @@ public final class MCPlugin extends JavaPlugin implements Listener {
         					
         					game.zombiecount--;
         					
-        					target.sendMessage("Du hast +1 Score, aktueller Score " + score);
+        					target.sendTitle("","Du hast +1 Score, aktueller Score " + currscore);
         					
         				}
         				
@@ -225,13 +228,13 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     				
     				if (event.getEntityType().equals(EntityType.ZOMBIE)) {
     					
-    					game.skeletoncount--;
+    					game.zombiecount--;
     					
     				}
     				
     				if (event.getEntityType().equals(EntityType.SKELETON)) {
     					
-    					game.zombiecount--;
+    					game.skeletoncount--;
     					
     					
     				}
@@ -359,14 +362,6 @@ public final class MCPlugin extends JavaPlugin implements Listener {
                     	
                     	leaveteam(target);
                     	
-                    } else if (sign.getLine(0).equalsIgnoreCase("(levelup)")) {
-                    	
-                    	if (teams.get(target.getUniqueId().toString()) != null) {
-                    		levelclass(target);
-                		} else {
-                			target.sendMessage("Player nicht in Team");
-                		}
-                    	
                     } else if (sign.getLine(0).equalsIgnoreCase("(start)")) {
                     	
                     	start(target);
@@ -386,6 +381,38 @@ public final class MCPlugin extends JavaPlugin implements Listener {
                     		showlevelscreen(target, sign.getX()-1, sign.getX()+1, sign.getY()-1, sign.getY()+1, sign.getZ(), sign.getZ(), sign);
                     		
                     	}
+                    	
+                    } else if (sign.getLine(0).contentEquals("(applylevel)")) {
+                    	
+                    	if ( teams.get( target.getUniqueId().toString()).equalsIgnoreCase("jaeger")) {
+                    		                  		
+                    		int rlevel = Klassen.getInstance().jaegerMeta(target, meta.get(target.getUniqueId().toString()))[0];
+                    		int blevel = Klassen.getInstance().jaegerMeta(target, meta.get(target.getUniqueId().toString()))[1];
+                    		
+                    		String newmeta = "";
+                    		
+                    		if ( sign.getLine(1).equalsIgnoreCase("rüstung") ) {
+                    			
+                    			rlevel++;
+                    			
+                    			newmeta = "r:" + rlevel + ",b:" + blevel;
+                    			
+                    			levelclass(target, newmeta);
+                    			
+                    		} else if (sign.getLine(1).equalsIgnoreCase("bogen")) {
+                    			
+                    			blevel++;
+                    			
+                    			newmeta = "r:" + rlevel + ",b:" + blevel;
+                    			
+                    			levelclass(target, newmeta);
+                    		
+                    		}
+                    		
+                    		meta.put(target.getUniqueId().toString(), newmeta);
+                    		
+                    	}
+                    	
                     }
                     
                 } 
@@ -395,95 +422,148 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 
     }
     
+    private void dellevelscreen(int minx, int maxx, int miny, int maxy, int minz, int maxz, Sign sign) {
+    	
+    	int signindex = 0;
+    	
+			for (int py = maxy; py >= miny; py--) {
+	    		for (int pz = minz; pz <= maxz; pz++) {
+	    			for (int px = minx; px <= maxx; px++) {
+	    			
+	    				if (signindex == 4) {
+	    					
+	    				} else {
+	    					editSign(px, py, pz, sign, "", "", "", "");
+	    				}
+	    				
+	    				signindex++;
+	    			
+	    			}
+	    		}
+	    	}
+		}
+	    			
+
+    
     private void showlevelscreen(Player target, int minx, int maxx, int miny, int maxy, int minz, int maxz, Sign sign) {
     	
     	int signindex = 0;
     	
-    	for (int py = maxy; py >= miny; py--) {
-    		for (int pz = minz; pz <= maxz; pz++) {
-    			for (int px = minx; px <= maxx; px++) {
-    			
-    			
-    				
-        			if (signindex == 0) {
-        				
-        				if (editSign(px, py, pz, sign, "Alte Eigenschaft", "|", "\\/", "")) {
-        					signindex++;
-        				}
-        				
-        			} else if (signindex == 1) {
-        				
-        				if (editSign(px, py, pz, sign, "Du bist auf", "Level " + (level.get(target.getUniqueId().toString()) + 1) + "", "aufgestiegen", "-------------")) {
-        					signindex++;
-        				}
-        				
-        			} else if (signindex == 2) {
-        				
-        				if (editSign(px, py, pz, sign, "Neue Eigenschaft", "|", "\\/", "")) {
-        					signindex++;
-        				}
-        				
-        			} else if (signindex == 3) {
-        				
-        				if (teams.get(target.getUniqueId().toString()).equalsIgnoreCase("jaeger")) {
-        					
-        					if (editSign(px, py, pz, sign, "Pfeilcooldown", "", Klassen.getInstance().jaeger_bowcooldown[level.get(target.getUniqueId().toString())] + " Ticks", "")) {
-            					signindex++;
-            				}
-        					
-        				}
-        			
-        			} else if (signindex == 4) {
-        				
-        				// Mittleres Schild...
-        				
-        				signindex++;
-        				
-        			} else if (signindex == 5) {
-        				
-        				if (teams.get(target.getUniqueId().toString()).equalsIgnoreCase("jaeger")) {
-        					
-        					if (editSign(px, py, pz, sign, "Pfeilcooldown", "", (Klassen.getInstance().jaeger_bowcooldown[level.get(target.getUniqueId().toString())+1]) + " Ticks", "")) {
-            					signindex++;
-            				}
-        					
-        				}
-        				
-        			} else if (signindex == 6) {
-        				
-        				if (teams.get(target.getUniqueId().toString()).equalsIgnoreCase("jaeger")) {
-        					
-        					if (editSign(px, py, pz, sign, "(applylevel)", "Rüstung", "", "")) {
-            					signindex++;
-            				}
-        					
-        				}
-        				
-        			} else if (signindex == 7) {
-        				
-        				if (teams.get(target.getUniqueId().toString()).equalsIgnoreCase("jaeger")) {
-        					
-        					if (editSign(px, py, pz, sign, "<<<<<<<<<<<<", "Wähle ein", "Upgrade", ">>>>>>>>>>>>")) {
-            					signindex++;
-            				}
-        					
-        				}
-        				
-        			} else if (signindex == 8) {
-        				
-        				if (teams.get(target.getUniqueId().toString()).equalsIgnoreCase("jaeger")) {
-        					
-        					if (editSign(px, py, pz, sign, "(applylevel)", "Bogen", "", "")) {
-            					signindex++;
-            				}
-        					
-        				}
-        				
-        			}
-    				
-    			}
-            }
-        }
+    	if (teams.get(target.getUniqueId().toString()) == null) {
+ 			target.sendMessage("Nicht in Team!");
+     		dellevelscreen(minx, maxx, miny, maxy, minz, maxz, sign);
+    	} else if (level.get( target.getUniqueId().toString() ) == (Klassen.getInstance().MAXLEVEL.get(teams.get(target.getUniqueId().toString())) - 1)) {
+			target.sendTitle("Max Level!", "Du kannst nicht weiter aufsteigen!");
+			dellevelscreen(minx, maxx, miny, maxy, minz, maxz, sign);
+		} else if (score.get(target.getUniqueId().toString()) <= Klassen.getInstance().jager_score[level.get(target.getUniqueId().toString()) + 1]) {
+    		target.sendTitle("Nicht genug Score", "Score=" + score.get(target.getUniqueId().toString()) + ", du benötigst score=" + Klassen.getInstance().jager_score[level.get(target.getUniqueId().toString()) + 1]);
+    		dellevelscreen(minx, maxx, miny, maxy, minz, maxz, sign);
+    	} else {
+			
+			for (int py = maxy; py >= miny; py--) {
+	    		for (int pz = minz; pz <= maxz; pz++) {
+	    			for (int px = minx; px <= maxx; px++) {
+	    				
+	        			if (signindex == 0) {
+	        				
+	        				if (editSign(px, py, pz, sign, "Alte Eigenschaft", "|", "\\/", "")) {
+	        					signindex++;
+	        				}
+	        				
+	        			} else if (signindex == 1) {
+	        				
+	        				
+	        				
+	        				if (editSign(px, py, pz, sign, "Du bist auf", "Level " + (level.get(target.getUniqueId().toString()) + 1) + "", "aufgestiegen", "-------------")) {
+	        					signindex++;
+	        				}
+	        				
+	        			} else if (signindex == 2) {
+	        				
+	        				if (editSign(px, py, pz, sign, "Neue Eigenschaft", "|", "\\/", "")) {
+	        					signindex++;
+	        				}
+	        				
+	        			} else if (signindex == 3) {
+	        				
+	        				if (teams.get(target.getUniqueId().toString()).equalsIgnoreCase("jaeger")) {
+	        					       					
+	        					if (editSign(px, py, pz, sign, "Pfeilcooldown", "", Klassen.getInstance().jaeger_bowcooldown[level.get(target.getUniqueId().toString())] + " Ticks", "")) {
+	            					signindex++;
+	            				}
+	        					
+	        				}
+	        			
+	        			} else if (signindex == 4) {
+	        				
+	        				// Mittleres Schild...
+	        				
+	        				signindex++;
+	        				
+	        			} else if (signindex == 5) {
+	        				
+	        				if (teams.get(target.getUniqueId().toString()).equalsIgnoreCase("jaeger")) {
+	        					
+	        					if (editSign(px, py, pz, sign, "Pfeilcooldown", "", (Klassen.getInstance().jaeger_bowcooldown[level.get(target.getUniqueId().toString())+1]) + " Ticks", "")) {
+	            					signindex++;
+	            				}
+	        					
+	        				}
+	        				
+	        			} else if (signindex == 6) {
+	        				
+	        				
+	        				if (teams.get(target.getUniqueId().toString()).equalsIgnoreCase("jaeger")) {
+	        					
+	        					int[] metalevel = Klassen.getInstance().jaegerMeta(target, meta.get(target.getUniqueId().toString()));
+	        					
+	        					if (metalevel[0] - metalevel[1] > 0) {
+	        						editSign(px, py, pz, sign, "Erst Bogen leveln!", "", "", "");
+	                				signindex++;
+	        					} else {
+	        						editSign(px, py, pz, sign, "(applylevel)", "Rüstung", "", "");
+	                				signindex++;
+	        					}
+	        					
+	        					
+	        					
+	        				}
+	        				
+	        			} else if (signindex == 7) {
+	        				
+	        				if (teams.get(target.getUniqueId().toString()).equalsIgnoreCase("jaeger")) {
+	        					
+	        					if (editSign(px, py, pz, sign, "<<<<<<<<<<<<", "Wähle ein", "Upgrade", ">>>>>>>>>>>>")) {
+	            					signindex++;
+	            				}
+	        					
+	        				}
+	        				
+	        			} else if (signindex == 8) {
+	        				
+	        				if (teams.get(target.getUniqueId().toString()).equalsIgnoreCase("jaeger")) {
+	        					
+	        					int[] metalevel = Klassen.getInstance().jaegerMeta(target, meta.get(target.getUniqueId().toString()));
+	        					
+	        					if (metalevel[1] - metalevel[0] > 0) {
+	        						editSign(px, py, pz, sign, "Erst Rüstung leveln!", "", "", "");
+	                				signindex++;
+	        					} else {
+	        						editSign(px, py, pz, sign, "(applylevel)", "Bogen", "", "");
+	                				signindex++;
+	        					}
+	        					
+	        				}
+	        				
+	        			}
+	    				
+	    			}
+	            }
+	        }
+			
+		}
+    	
+    	
     	
     }
     
@@ -665,16 +745,17 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 		teams.put(target.getUniqueId().toString(), classname);
 		this.level.put(target.getUniqueId().toString(), 0);
 		score.put(target.getUniqueId().toString(), 0L);
+		meta.put(target.getUniqueId().toString(), "r:0,b:0");
 		
     	switch (classname) {
 		case "jaeger":
 	    	
-	    	Klassen.getInstance().jaeger(0, target);
+	    	Klassen.getInstance().jaeger(0, target, "r:0,b:0");
 			
 			break;
 		case "tank":
 			
-	    	Klassen.getInstance().tank(0, target);
+	    	Klassen.getInstance().tank(0, target, "");
 			
 			break;
 		
@@ -685,7 +766,7 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     	return 1;
     }
     
-    private void levelclass(Player target) {
+    private void levelclass(Player target, String meta) {
     	
     	int newlevel = level.get(target.getUniqueId().toString()) + 1;
     	
@@ -697,12 +778,12 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     	
     	if (teams.get(target.getUniqueId().toString()).equalsIgnoreCase("jaeger")){
     		
-    		Klassen.getInstance().jaeger(newlevel, target);
+    		Klassen.getInstance().jaeger(newlevel, target, meta);
     		
     	}
     	if (teams.get(target.getUniqueId().toString()).equalsIgnoreCase("tank")){
     		
-    		Klassen.getInstance().tank(newlevel, target);
+    		Klassen.getInstance().tank(newlevel, target, meta);
     		
     	}
     	

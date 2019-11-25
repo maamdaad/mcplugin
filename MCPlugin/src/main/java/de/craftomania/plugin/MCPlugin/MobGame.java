@@ -23,7 +23,7 @@ public class MobGame {
 	BukkitRunnable rmobs;
 	static long ticks = 14;
 	static long[] INTERVALS = {5*ticks, 5*ticks, 4*ticks, 4*ticks, 3*ticks, 3*ticks};
-	static int[] COUNTS = {10, 10, 20, 20, 30, 30};
+	static int[] COUNTS = {2, 3, 4, 5, 6, 7};
 	int zombiecount = 0;
 	int skeletoncount = 0;
 	int currlevel = 0;
@@ -84,11 +84,8 @@ public class MobGame {
 		public void run() {
 			if (roundrunning) {
 				
-				broadcast("Noch " + zombiecount + " Zombies und " + skeletoncount + " Skeletons!");
-				
 				if (zombiecount == 0 || skeletoncount == 0) {
 					roundrunning = false;
-					broadcast("Runde vorbei!");
 				}
 				
 			} else {
@@ -190,7 +187,7 @@ public class MobGame {
 			
 			final Player p = getByUUID(key);
 			
-			p.sendMessage(msg);
+			p.sendTitle("",msg);
 		}	
 	}
 	
