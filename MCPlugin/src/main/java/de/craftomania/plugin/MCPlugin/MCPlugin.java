@@ -388,6 +388,7 @@ public final class MCPlugin extends JavaPlugin implements Listener {
                     		                  		
                     		int rlevel = Klassen.getInstance().jaegerMeta(target, meta.get(target.getUniqueId().toString()))[0];
                     		int blevel = Klassen.getInstance().jaegerMeta(target, meta.get(target.getUniqueId().toString()))[1];
+                    		int slevel = Klassen.getInstance().jaegerMeta(target, meta.get(target.getUniqueId().toString()))[2];
                     		
                     		String newmeta = "";
                     		
@@ -395,19 +396,21 @@ public final class MCPlugin extends JavaPlugin implements Listener {
                     			
                     			rlevel++;
                     			
-                    			newmeta = "r:" + rlevel + ",b:" + blevel;
-                    			
-                    			levelclass(target, newmeta);
                     			
                     		} else if (sign.getLine(1).equalsIgnoreCase("bogen")) {
                     			
                     			blevel++;
                     			
-                    			newmeta = "r:" + rlevel + ",b:" + blevel;
+                    		
+                    		} else if (sign.getLine(1).equalsIgnoreCase("schwert")) {
                     			
-                    			levelclass(target, newmeta);
+                    			slevel++;
                     		
                     		}
+                    		
+                    		newmeta = "r:" + rlevel + ",b:" + blevel + ",s:" + slevel;
+                			
+                			levelclass(target, newmeta);
                     		
                     		meta.put(target.getUniqueId().toString(), newmeta);
                     		
@@ -442,8 +445,38 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 	    		}
 	    	}
 		}
-	    			
-
+    
+    private int[] lowestsnd(int[] arr) {
+    	
+    	int lowest = 1000;
+    	int lowestindex = 0;
+    	
+    	int snd = 999;
+    	int sndindex = 0;
+    	
+    	for (int i = 0; i < arr.length; i++) {
+    		
+    		if (arr[i] < lowest) {
+    			lowest = arr[i];
+    			lowestindex = i;
+    		}
+    		
+    	}
+    	
+    	for (int i = 0; i < arr.length; i++) {
+    		
+    		if (arr[i] > lowest && arr[i] < snd) {
+    			snd = arr[i];
+    			sndindex = i;
+    		}
+    		
+    	}
+    	
+    	int[] ret = {lowestindex, sndindex};
+    	
+    	return ret;
+    	
+    }
     
     private void showlevelscreen(Player target, int minx, int maxx, int miny, int maxy, int minz, int maxz, Sign sign) {
     	
@@ -517,13 +550,26 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 	        					
 	        					int[] metalevel = Klassen.getInstance().jaegerMeta(target, meta.get(target.getUniqueId().toString()));
 	        					
-	        					if (metalevel[0] - metalevel[1] > 0) {
-	        						editSign(px, py, pz, sign, "Erst Bogen leveln!", "", "", "");
-	                				signindex++;
-	        					} else {
+	        					if (lowestsnd(metalevel)[0] == 0) {
+	        						
+	        						//Rüstung
+	        						
 	        						editSign(px, py, pz, sign, "(applylevel)", "Rüstung", "", "");
-	                				signindex++;
+	        						
+	        					} else if (lowestsnd(metalevel)[0] == 1 ) {
+	        						
+	        						//Bogen
+	        						
+	        						editSign(px, py, pz, sign, "(applylevel)", "Bogen", "", "");
+	        						
+	        					} else if (lowestsnd(metalevel)[0] == 2 ) {
+	        						
+	        						//Schwert
+	        						
+	        						editSign(px, py, pz, sign, "(applylevel)", "Schwert", "", "");
+	        						
 	        					}
+	        					
 	        					
 	        					
 	        					
@@ -545,12 +591,24 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 	        					
 	        					int[] metalevel = Klassen.getInstance().jaegerMeta(target, meta.get(target.getUniqueId().toString()));
 	        					
-	        					if (metalevel[1] - metalevel[0] > 0) {
-	        						editSign(px, py, pz, sign, "Erst Rüstung leveln!", "", "", "");
-	                				signindex++;
-	        					} else {
+	        					if (lowestsnd(metalevel)[1] == 0) {
+	        						
+	        						//Rüstung
+	        						
+	        						editSign(px, py, pz, sign, "(applylevel)", "Rüstung", "", "");
+	        						
+	        					} else if (lowestsnd(metalevel)[1] == 1 ) {
+	        						
+	        						//Bogen
+	        						
 	        						editSign(px, py, pz, sign, "(applylevel)", "Bogen", "", "");
-	                				signindex++;
+	        						
+	        					} else if (lowestsnd(metalevel)[1] == 2 ) {
+	        						
+	        						//Schwert
+	        						
+	        						editSign(px, py, pz, sign, "(applylevel)", "Schwert", "", "");
+	        						
 	        					}
 	        					
 	        				}
@@ -756,12 +814,12 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 		teams.put(target.getUniqueId().toString(), classname);
 		this.level.put(target.getUniqueId().toString(), 0);
 		score.put(target.getUniqueId().toString(), 0L);
-		meta.put(target.getUniqueId().toString(), "r:0,b:0");
+		meta.put(target.getUniqueId().toString(), "r:0,b:0,s:0");
 		
     	switch (classname) {
 		case "jaeger":
 	    	
-	    	Klassen.getInstance().jaeger(0, target, "r:0,b:0");
+	    	Klassen.getInstance().jaeger(0, target, "r:0,b:0,s:0");
 			
 			break;
 		case "tank":

@@ -49,6 +49,7 @@ public class Klassen {
 		
 		int rlevel = 0;
 		int blevel = 0;
+		int slevel = 0;
 		
 		for (String s : atmp) {
 			
@@ -59,6 +60,10 @@ public class Klassen {
 			} else if (s.contains("b:")) {
 				
 				blevel = Integer.parseInt(s.split(":")[1]);
+				
+			} else if (s.contains("s:")) {
+				
+				slevel = Integer.parseInt(s.split(":")[1]);
 				
 			}
 			
@@ -73,6 +78,7 @@ public class Klassen {
 		
 		int rlevel = jaegerMeta(target, meta)[0];
 		int blevel = jaegerMeta(target, meta)[1];
+		int slevel = jaegerMeta(target, meta)[2];
 		
 		if (blevel == 1) {
 			target.sendMessage("1.BogenStufe");
@@ -80,6 +86,10 @@ public class Klassen {
 		
 		if (rlevel == 1) {
 			target.sendMessage("1.RüstungsStufe");
+		}
+		
+		if (slevel == 1) {
+			target.sendMessage("1.Schwertsufe");
 		}
 		
 		if (level == 0) {
