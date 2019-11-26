@@ -82,6 +82,22 @@ public class Klassen {
 		
 		if (blevel == 1) {
 			target.sendMessage("Bogen Level 2");
+			int bpos = 0;
+			ItemStack bogen2 = new ItemStack(Material.BOW, 1);
+			bogen2.addEnchantment(Enchantment.ARROW_DAMAGE, 1);
+    		ItemMeta bmeta = bogen2.getItemMeta();
+    		bmeta.setDisplayName("Bogen des Jägers II");
+    		bmeta.setUnbreakable(true);
+    		bogen2.setItemMeta(bmeta);
+			for (ItemStack item : target.getInventory().getContents()) {
+	    		if (item != null) {
+	    			if (item.getItemMeta().getDisplayName().equalsIgnoreCase("Bogen des Jägers I")) {
+		    			target.getInventory().setItem(bpos, bogen2);
+		    		}
+	    		}
+	    		bpos++;
+		    		
+	    	}
 		}
 		
 		if (rlevel == 1) {
@@ -135,7 +151,7 @@ public class Klassen {
     		
     		ItemStack bow = new ItemStack(Material.BOW, 1);
     		ItemMeta bmeta = bow.getItemMeta();
-    		bmeta.setDisplayName("Bogen des Jägers");
+    		bmeta.setDisplayName("Bogen des Jägers I");
     		bmeta.setUnbreakable(true);
     		bow.setItemMeta(bmeta);
     		target.getInventory().setItem(0, bow);
