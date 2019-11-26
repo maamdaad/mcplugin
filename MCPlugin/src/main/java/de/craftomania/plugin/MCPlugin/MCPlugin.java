@@ -467,7 +467,7 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     	arr[0] = arr[lowestindex];
     	arr[lowestindex] = tmp;
     	
-    	lowestindex = 0;
+    	lowestindex = 1;
     	lowest = 1000;
     	
     	for (int i = 1; i < arr.length; i++) {
