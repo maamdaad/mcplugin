@@ -38,9 +38,12 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.block.*;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -297,15 +300,31 @@ public final class MCPlugin extends JavaPlugin implements Listener {
             		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             		    public void run() {
             		    	ItemStack a = new ItemStack(Material.ARROW,1);
-                        	TippedArrow slow = (TippedArrow) new ItemStack(Material.TIPPED_ARROW);
-                        	TippedArrow weak = (TippedArrow) new ItemStack(Material.TIPPED_ARROW);
-                        	TippedArrow pois = (TippedArrow) new ItemStack(Material.TIPPED_ARROW);
-                        	TippedArrow dama = (TippedArrow) new ItemStack(Material.TIPPED_ARROW);
+            		    	ItemStack slow = new ItemStack(Material.TIPPED_ARROW,1);
+            		    	ItemStack weak = new ItemStack(Material.TIPPED_ARROW,1);
+            		    	ItemStack pois = new ItemStack(Material.TIPPED_ARROW,1);
+            		    	ItemStack dama = new ItemStack(Material.TIPPED_ARROW,1);
+            		    	
+            		    	PotionMeta meta = ((PotionMeta) slow.getItemMeta());
+            		    	meta.addCustomEffect(new PotionEffect(PotionEffectType.SLOW,5*20,1), true);
+            		    	slow.setItemMeta(meta);
+            		    	
+            		    	meta = ((PotionMeta) weak.getItemMeta());
+            		    	meta.addCustomEffect(new PotionEffect(PotionEffectType.WEAKNESS,5*20,1), true);
+            		    	weak.setItemMeta(meta);
+            		    	
+            		    	meta = ((PotionMeta) pois.getItemMeta());
+            		    	meta.addCustomEffect(new PotionEffect(PotionEffectType.POISON,5*20,1), true);
+            		    	pois.setItemMeta(meta);
+            		    	
+            		    	meta = ((PotionMeta) dama.getItemMeta());
+            		    	meta.addCustomEffect(new PotionEffect(PotionEffectType.HARM,5*20,1), true);
+            		    	dama.setItemMeta(meta);
                         	
-                        	slow.setBasePotionData( new PotionData(PotionType.SLOWNESS) );
+                        	/*slow.setBasePotionData( new PotionData(PotionType.SLOWNESS) );
                         	weak.setBasePotionData( new PotionData(PotionType.WEAKNESS) );
                         	pois.setBasePotionData( new PotionData(PotionType.POISON) );
-                        	dama.setBasePotionData( new PotionData(PotionType.INSTANT_DAMAGE) );
+                        	dama.setBasePotionData( new PotionData(PotionType.INSTANT_DAMAGE) );*/
             		    	
             		    	boolean hatnoch = false;
             		    	
@@ -321,9 +340,36 @@ public final class MCPlugin extends JavaPlugin implements Listener {
               		    	
               		    	if (!hatnoch) {
               		    		
-              		    		target.getInventory().setItem(8, a);
-              		    		
               		    		Random rand = new Random();
+              		    		
+              		    		double ra = rand.nextDouble();
+              		    		
+              		    		int currlevel = level.get( target.getUniqueId().toString() );
+              		    		
+              		    		if (ra < Klassen.getInstance().jaeger_damachance[currlevel]) {
+              		    			
+              		    			target.getInventory().setItem(8, (ItemStack) dama);
+              		    			
+              		    		} else if (ra < (Klassen.getInstance().jaeger_poischance[currlevel] + Klassen.getInstance().jaeger_damachance[currlevel]) 
+              		    				&& ra > Klassen.getInstance().jaeger_damachance[currlevel]) {
+              		    			
+              		    			target.getInventory().setItem(8, (ItemStack) pois);
+              		    			
+              		    		} else if (ra < (Klassen.getInstance().jaeger_slowchance[currlevel] + Klassen.getInstance().jaeger_poischance[currlevel] + Klassen.getInstance().jaeger_damachance[currlevel]) 
+              		    				&& ra > Klassen.getInstance().jaeger_poischance[currlevel] + Klassen.getInstance().jaeger_damachance[currlevel]) {
+              		    			
+              		    			target.getInventory().setItem(8, (ItemStack) slow);
+              		    			
+              		    		} else if (ra < (Klassen.getInstance().jaeger_weakchange[currlevel] + Klassen.getInstance().jaeger_slowchance[currlevel] + Klassen.getInstance().jaeger_poischance[currlevel] + Klassen.getInstance().jaeger_damachance[currlevel]) 
+              		    				&& (ra > (Klassen.getInstance().jaeger_slowchance[currlevel] + Klassen.getInstance().jaeger_poischance[currlevel] + Klassen.getInstance().jaeger_damachance[currlevel]) )) {
+              		    			
+              		    			target.getInventory().setItem(8, (ItemStack) weak);
+              		    			
+              		    		} else {
+              		    			
+              		    			target.getInventory().setItem(8, a);
+              		    			
+              		    		}
               		    		
               		    		
               		    	}
