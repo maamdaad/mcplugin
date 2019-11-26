@@ -92,6 +92,18 @@ public class Klassen {
 			target.sendMessage("1.Schwertsufe");
 		}
 		
+		if (blevel == 2) {
+			
+		}
+		
+		if (rlevel == 2) {
+			
+		}
+		
+		if (slevel == 2) {
+			
+		}
+		
 		if (level == 0) {
 	   		
     		ItemStack boots = new ItemStack(Material.LEATHER_BOOTS, 1);
