@@ -499,31 +499,23 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 	    				
 	        			if (signindex == 0) {
 	        				
-	        				if (editSign(px, py, pz, sign, "Alte Eigenschaft", "|", "\\/", "")) {
-	        					signindex++;
-	        				}
+	        				editSign(px, py, pz, sign, "Alte Eigenschaft", "|", "\\/", "");
 	        				
 	        			} else if (signindex == 1) {
 	        				
 	        				
 	        				
-	        				if (editSign(px, py, pz, sign, "Du bist auf", "Level " + (level.get(target.getUniqueId().toString()) + 1) + "", "aufgestiegen", "-------------")) {
-	        					signindex++;
-	        				}
+	        				editSign(px, py, pz, sign, "Du bist auf", "Level " + (level.get(target.getUniqueId().toString()) + 1) + "", "aufgestiegen", "-------------");
 	        				
 	        			} else if (signindex == 2) {
 	        				
-	        				if (editSign(px, py, pz, sign, "Neue Eigenschaft", "|", "\\/", "")) {
-	        					signindex++;
-	        				}
+	        				editSign(px, py, pz, sign, "Neue Eigenschaft", "|", "\\/", "");
 	        				
 	        			} else if (signindex == 3) {
 	        				
 	        				if (teams.get(target.getUniqueId().toString()).equalsIgnoreCase("jaeger")) {
 	        					       					
-	        					if (editSign(px, py, pz, sign, "Pfeilcooldown", "", Klassen.getInstance().jaeger_bowcooldown[level.get(target.getUniqueId().toString())] + " Ticks", "")) {
-	            					signindex++;
-	            				}
+	        					editSign(px, py, pz, sign, "Pfeilcooldown", "", Klassen.getInstance().jaeger_bowcooldown[level.get(target.getUniqueId().toString())] + " Ticks", "");
 	        					
 	        				}
 	        			
@@ -537,9 +529,7 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 	        				
 	        				if (teams.get(target.getUniqueId().toString()).equalsIgnoreCase("jaeger")) {
 	        					
-	        					if (editSign(px, py, pz, sign, "Pfeilcooldown", "", (Klassen.getInstance().jaeger_bowcooldown[level.get(target.getUniqueId().toString())+1]) + " Ticks", "")) {
-	            					signindex++;
-	            				}
+	        					editSign(px, py, pz, sign, "Pfeilcooldown", "", (Klassen.getInstance().jaeger_bowcooldown[level.get(target.getUniqueId().toString())+1]) + " Ticks", "");
 	        					
 	        				}
 	        				
@@ -569,19 +559,15 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 	        						editSign(px, py, pz, sign, "(applylevel)", "Schwert", "", "");
 	        						
 	        					}
-	        					
-	        					
-	        					
-	        					
+	        				
 	        				}
 	        				
 	        			} else if (signindex == 7) {
 	        				
 	        				if (teams.get(target.getUniqueId().toString()).equalsIgnoreCase("jaeger")) {
 	        					
-	        					if (editSign(px, py, pz, sign, "<<<<<<<<<<<<", "Wähle ein", "Upgrade", ">>>>>>>>>>>>")) {
-	            					signindex++;
-	            				}
+	        					editSign(px, py, pz, sign, "<<<<<<<<<<<<", "Wähle ein", "Upgrade", ">>>>>>>>>>>>");
+	            				
 	        					
 	        				}
 	        				
@@ -611,9 +597,13 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 	        						
 	        					}
 	        					
+	        					
 	        				}
 	        				
 	        			}
+	        			
+	        			signindex++;
+	        			
 	    				
 	    			}
 	            }
