@@ -84,7 +84,7 @@ public class MobGame {
 		public void run() {
 			if (roundrunning) {
 				
-				if (zombiecount == 0 || skeletoncount == 0) {
+				if (zombiecount == 0 && skeletoncount == 0) {
 					roundrunning = false;
 				}
 				

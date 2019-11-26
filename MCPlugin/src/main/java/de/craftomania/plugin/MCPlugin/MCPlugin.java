@@ -455,7 +455,7 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     	} else if (level.get( target.getUniqueId().toString() ) == (Klassen.getInstance().MAXLEVEL.get(teams.get(target.getUniqueId().toString())) - 1)) {
 			target.sendTitle("Max Level!", "Du kannst nicht weiter aufsteigen!");
 			dellevelscreen(minx, maxx, miny, maxy, minz, maxz, sign);
-		} else if (score.get(target.getUniqueId().toString()) <= Klassen.getInstance().jager_score[level.get(target.getUniqueId().toString()) + 1]) {
+		} else if (score.get(target.getUniqueId().toString()) < Klassen.getInstance().jager_score[level.get(target.getUniqueId().toString()) + 1]) {
     		target.sendTitle("Nicht genug Score", "Score=" + score.get(target.getUniqueId().toString()) + ", du benötigst score=" + Klassen.getInstance().jager_score[level.get(target.getUniqueId().toString()) + 1]);
     		dellevelscreen(minx, maxx, miny, maxy, minz, maxz, sign);
     	} else {
@@ -723,6 +723,17 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     				Player target = (Player) sender;
     				target.sendMessage("Kein Game initialisiert!");
     			}
+    		}
+    		
+    		if (args[0].equalsIgnoreCase("addscore")) {
+    			Player target = (Player) sender;
+    			
+    			long curr = score.get( target.getUniqueId().toString() );
+    			
+    			curr += Integer.parseInt( args[1] );
+    			
+    			score.put( target.getUniqueId().toString() , curr);
+    	
     		}
     	
     	}
