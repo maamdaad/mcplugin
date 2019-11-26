@@ -69,7 +69,7 @@ public class Klassen {
 			
 		}
 		
-		int[] ret = {rlevel, blevel};
+		int[] ret = {rlevel, blevel, slevel};
 		
 		return ret;
 	}
