@@ -287,33 +287,35 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     	if (e.getEntity() instanceof Player) {
     		final Player target = (Player) e.getEntity();
         	
-        	if (teams.get( target.getUniqueId().toString() ).equalsIgnoreCase("jaeger")) {
-        		
-        		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
-        		    public void run() {
-        		    	ItemStack a = new ItemStack(Material.ARROW,1);
-                    	
-        		    	boolean hatnoch = false;
-        		    	
-          		    	for (ItemStack item : target.getInventory().getContents()) {
-        		    		if (item != null) {
-        		    			if (item.getType().equals(a.getType())) {
-            		    			target.sendMessage("Aha! Du hast noch einen Pfeil du Spasti!");
-            		    			hatnoch = true;
+    		if (teams.get(target.getUniqueId().toString()) != null) {
+    			if (teams.get( target.getUniqueId().toString() ).equalsIgnoreCase("jaeger")) {
+            		
+            		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+            		    public void run() {
+            		    	ItemStack a = new ItemStack(Material.ARROW,1);
+                        	
+            		    	boolean hatnoch = false;
+            		    	
+              		    	for (ItemStack item : target.getInventory().getContents()) {
+            		    		if (item != null) {
+            		    			if (item.getType().equals(a.getType())) {
+                		    			target.sendMessage("Aha! Du hast noch einen Pfeil du Spasti!");
+                		    			hatnoch = true;
+                		    		}
             		    		}
-        		    		}
-          		    		
-        		    	}
-          		    	
-          		    	if (!hatnoch) {
-          		    		
-          		    		target.getInventory().setItem(8, a);
-          		    	}
+              		    		
+            		    	}
+              		    	
+              		    	if (!hatnoch) {
+              		    		
+              		    		target.getInventory().setItem(8, a);
+              		    	}
 
-        		    }
-        		}, Klassen.getInstance().jaeger_bowcooldown[ level.get(target.getUniqueId().toString()) ]);
+            		    }
+            		}, Klassen.getInstance().jaeger_bowcooldown[ level.get(target.getUniqueId().toString()) ]);
 
-        	}
+            	}
+    		}	
     	}
     }
     
@@ -416,6 +418,8 @@ public final class MCPlugin extends JavaPlugin implements Listener {
                     		
                     		meta.put(target.getUniqueId().toString(), newmeta);
                     		
+                    		findMidSign(sign);
+                    		
                     	}
                     	
                     }
@@ -425,6 +429,45 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     		
     	}
 
+    }
+    
+    private void findMidSign(Sign sign) {
+    	
+    	for (int px = sign.getX()-2; px <= sign.getX()+2; px++) {
+    		
+    		for (int py = sign.getY()-2; py <= sign.getY()+2; py++) {
+    			
+    			for (int pz = sign.getZ()-2; pz <= sign.getZ()+2; pz++) {
+    				
+    				if (spawn.getWorld().getBlockAt(px,py,pz).getState() instanceof Sign) {
+    					
+    					Sign tmp = (Sign) spawn.getWorld().getBlockAt(px, py, pz).getState();
+    					
+    					if (tmp.getLine(0).equals("(chooselevel)")) {
+    						
+    						if (lobby.getWorld().getBlockAt( tmp.getX()+1, tmp.getY(), tmp.getZ() ).getType().equals(Material.AIR) || lobby.getWorld().getBlockAt( tmp.getX()-1, tmp.getY(), tmp.getZ() ).getType().equals(Material.AIR)) {
+                        		    	                    	
+    	                    	dellevelscreen(px, px, py - 1, py + 1, pz - 1, pz + 1, tmp);
+                        		
+                        	}
+                        	
+                        	if (lobby.getWorld().getBlockAt(  tmp.getX(), tmp.getY(), tmp.getZ()+1 ).getType().equals(Material.AIR) || lobby.getWorld().getBlockAt(  tmp.getX(), tmp.getY(), tmp.getZ()-1 ).getType().equals(Material.AIR)) {
+                        		
+                        		dellevelscreen(px - 1, px + 1, py - 1, py + 1, pz , pz, tmp);
+                        		
+                        	}
+    						
+    						
+    						
+    					}
+    				}
+    				
+    			}
+    			
+    		}
+    		
+    	}
+    	
     }
     
     private void dellevelscreen(int minx, int maxx, int miny, int maxy, int minz, int maxz, Sign sign) {

@@ -138,7 +138,7 @@ public class Klassen {
     		lore.add("+ 2 armor");
     		lmeta.setLore(lore);
     		leggins.setItemMeta(lmeta);
-    		target.getInventory().setChestplate(leggins);
+    		target.getInventory().setLeggings(leggins);
     		
     		ItemStack boots = new ItemStack(Material.LEATHER_BOOTS, 1);
     		boots.addEnchantment(Enchantment.BINDING_CURSE, 1);
