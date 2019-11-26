@@ -85,10 +85,10 @@ public class Klassen {
 			int bpos = 0;
 			ItemStack bogen2 = new ItemStack(Material.BOW, 1);
 			bogen2.addEnchantment(Enchantment.ARROW_DAMAGE, 1);
-    		ItemMeta bmeta = bogen2.getItemMeta();
-    		bmeta.setDisplayName("Bogen des Jägers II");
-    		bmeta.setUnbreakable(true);
-    		bogen2.setItemMeta(bmeta);
+    		ItemMeta meta = bogen2.getItemMeta();
+    		meta.setDisplayName("Bogen des Jägers II");
+    		meta.setUnbreakable(true);
+    		bogen2.setItemMeta(meta);
 			for (ItemStack item : target.getInventory().getContents()) {
 	    		if (item != null) {
 	    			if (item.getItemMeta().getDisplayName().equalsIgnoreCase("Bogen des Jägers I")) {
@@ -102,6 +102,30 @@ public class Klassen {
 		
 		if (rlevel == 1) {
 			target.sendMessage("Rüstung Level 2");
+			
+			ItemStack helm = new ItemStack(Material.LEATHER_HELMET, 1);
+    		helm.addEnchantment(Enchantment.BINDING_CURSE, 1);
+    		ItemMeta meta = helm.getItemMeta();
+    		meta.setDisplayName("Rüstung des Jägers II");
+    		meta.setUnbreakable(true);
+    		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+    		lore = new ArrayList<String>();
+    		lore.add("+ 1 armor");
+    		meta.setLore(lore);
+    		helm.setItemMeta(meta);
+    		target.getInventory().setHelmet(helm);
+    		
+    		ItemStack leggins = new ItemStack(Material.LEATHER_LEGGINGS, 1);
+    		leggins.addEnchantment(Enchantment.BINDING_CURSE, 1);
+    		ItemMeta meta = leggins.getItemMeta();
+    		meta.setDisplayName("Rüstung des Jägers II");
+    		meta.setUnbreakable(true);
+    		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+    		lore = new ArrayList<String>();
+    		lore.add("+ 2 armor");
+    		meta.setLore(lore);
+    		leggins.setItemMeta(meta);
+    		target.getInventory().setChestplate(leggins);
 		}
 		
 		if (slevel == 1) {
@@ -125,42 +149,42 @@ public class Klassen {
     		ItemStack boots = new ItemStack(Material.LEATHER_BOOTS, 1);
     		
     		boots.addEnchantment(Enchantment.BINDING_CURSE, 1);
-    		ItemMeta btmeta = boots.getItemMeta();
-    		btmeta.setDisplayName("Schuhe des Jägers");
-    		btmeta.setUnbreakable(true);
-    		btmeta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier("generic.movementspeed", 0.015, AttributeModifier.Operation.ADD_NUMBER));
-    		btmeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+    		ItemMeta meta = boots.getItemMeta();
+    		meta.setDisplayName("Rüstung des Jägers I");
+    		meta.setUnbreakable(true);
+    		meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier("generic.movementspeed", 0.015, AttributeModifier.Operation.ADD_NUMBER));
+    		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
     		ArrayList<String> lore = new ArrayList<String>();
     		lore.add("+ 15% movement speed");
     		lore.add("+ 1 armor");
-    		btmeta.setLore(lore);
-    		boots.setItemMeta(btmeta);
+    		meta.setLore(lore);
+    		boots.setItemMeta(meta);
     		target.getInventory().setBoots(boots);
     		
     		ItemStack chestplate = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
     		chestplate.addEnchantment(Enchantment.BINDING_CURSE, 1);
-    		ItemMeta chmeta = chestplate.getItemMeta();
-    		chmeta.setDisplayName("Jacke des Jägers");
-    		chmeta.setUnbreakable(true);
-    		chmeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+    		ItemMeta meta = chestplate.getItemMeta();
+    		meta.setDisplayName("Rüstung des Jägers I");
+    		meta.setUnbreakable(true);
+    		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
     		lore = new ArrayList<String>();
     		lore.add("+ 3 armor");
-    		chmeta.setLore(lore);
-    		chestplate.setItemMeta(chmeta);
+    		meta.setLore(lore);
+    		chestplate.setItemMeta(meta);
     		target.getInventory().setChestplate(chestplate);
     		
     		ItemStack bow = new ItemStack(Material.BOW, 1);
-    		ItemMeta bmeta = bow.getItemMeta();
-    		bmeta.setDisplayName("Bogen des Jägers I");
-    		bmeta.setUnbreakable(true);
-    		bow.setItemMeta(bmeta);
+    		ItemMeta meta = bow.getItemMeta();
+    		meta.setDisplayName("Bogen des Jägers I");
+    		meta.setUnbreakable(true);
+    		bow.setItemMeta(meta);
     		target.getInventory().setItem(0, bow);
     		
     		ItemStack sword = new ItemStack(Material.WOODEN_SWORD,1);
-    		ItemMeta smeta = sword.getItemMeta();
-    		smeta.setDisplayName("Schwert des Jägers");
-    		smeta.setUnbreakable(true);
-    		sword.setItemMeta(smeta);
+    		ItemMeta meta = sword.getItemMeta();
+    		meta.setDisplayName("Schwert des Jägers");
+    		meta.setUnbreakable(true);
+    		sword.setItemMeta(meta);
     		target.getInventory().setItem(1, sword);
     		
     		ItemStack arrow = new ItemStack(Material.ARROW,1);
@@ -223,45 +247,45 @@ public class Klassen {
 			
 			boots.addEnchantment(Enchantment.BINDING_CURSE, 1);
 			boots.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-			ItemMeta bmeta = boots.getItemMeta();
-			bmeta.setUnbreakable(true);
-			bmeta.setDisplayName("Schuhe des Tanks");
-			bmeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+			ItemMeta meta = boots.getItemMeta();
+			meta.setUnbreakable(true);
+			meta.setDisplayName("Schuhe des Tanks");
+			meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 			ArrayList<String> lore = new ArrayList<String>();
 			lore.add("+ 2 armor");
-			bmeta.setLore(lore);
-			boots.setItemMeta(bmeta);
+			meta.setLore(lore);
+			boots.setItemMeta(meta);
 			
 			chest.addEnchantment(Enchantment.BINDING_CURSE, 1);
 			chest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-			ItemMeta cmeta = chest.getItemMeta();
-			cmeta.setUnbreakable(true);
-			cmeta.setDisplayName("Rüstung des Tanks");
-			cmeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+			ItemMeta meta = chest.getItemMeta();
+			meta.setUnbreakable(true);
+			meta.setDisplayName("Rüstung des Tanks");
+			meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 			lore = new ArrayList<String>();
 			lore.add("+ 6 armor");
-			cmeta.setLore(lore);
-			chest.setItemMeta(cmeta);
+			meta.setLore(lore);
+			chest.setItemMeta(meta);
 			
 			helm.addEnchantment(Enchantment.BINDING_CURSE, 1);
 			helm.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-			ItemMeta hmeta = helm.getItemMeta();
-			hmeta.setUnbreakable(true);
-			hmeta.setDisplayName("Helm des Tanks");
-			hmeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+			ItemMeta meta = helm.getItemMeta();
+			meta.setUnbreakable(true);
+			meta.setDisplayName("Helm des Tanks");
+			meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 			lore = new ArrayList<String>();
 			lore.add("+ 2 armor");
-			hmeta.setLore(lore);
-			helm.setItemMeta(hmeta);
+			meta.setLore(lore);
+			helm.setItemMeta(meta);
 			
-			ItemMeta smeta = sword.getItemMeta();
-			smeta.setUnbreakable(true);
-			smeta.setDisplayName("Schwert des Tanks");
-			smeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+			ItemMeta meta = sword.getItemMeta();
+			meta.setUnbreakable(true);
+			meta.setDisplayName("Schwert des Tanks");
+			meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 			lore = new ArrayList<String>();
 			lore.add("5 attack damage");
-			smeta.setLore(lore);
-			sword.setItemMeta(smeta);
+			meta.setLore(lore);
+			sword.setItemMeta(meta);
 			
 			target.getInventory().setChestplate(chest);
 			target.getInventory().setBoots(boots);
