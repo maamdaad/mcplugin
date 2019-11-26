@@ -523,8 +523,6 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 	        				
 	        				// Mittleres Schild...
 	        				
-	        				signindex++;
-	        				
 	        			} else if (signindex == 5) {
 	        				
 	        				if (teams.get(target.getUniqueId().toString()).equalsIgnoreCase("jaeger")) {
