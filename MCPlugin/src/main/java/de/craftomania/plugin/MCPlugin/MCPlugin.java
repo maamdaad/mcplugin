@@ -433,11 +433,11 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     
     private void findMidSign(Sign sign) {
     	
-    	for (int px = sign.getX()-1; px <= sign.getX()+1; px++) {
+    	for (int px = sign.getX()-2; px <= sign.getX()+2; px++) {
     		
-    		for (int py = sign.getY()-1; py <= sign.getY()+1; py++) {
+    		for (int py = sign.getY()-2; py <= sign.getY()+2; py++) {
     			
-    			for (int pz = sign.getZ()-1; pz <= sign.getZ()+1; pz++) {
+    			for (int pz = sign.getZ()-2; pz <= sign.getZ()+2; pz++) {
     				
     				if (spawn.getWorld().getBlockAt(px,py,pz).getState() instanceof Sign) {
     					
@@ -445,7 +445,19 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     					
     					if (tmp.getLine(0).equals("(chooselevel)")) {
     						
-    						dellevelscreen(px - 1, px + 1, py - 1, py + 1, pz - 1, pz + 1, tmp);
+    						if (lobby.getWorld().getBlockAt( tmp.getX()+1, tmp.getY(), tmp.getZ() ).getType().equals(Material.AIR) || lobby.getWorld().getBlockAt( tmp.getX()-1, tmp.getY(), tmp.getZ() ).getType().equals(Material.AIR)) {
+                        		    	                    	
+    	                    	dellevelscreen(px, px, py - 1, py + 1, pz - 1, pz + 1, tmp);
+                        		
+                        	}
+                        	
+                        	if (lobby.getWorld().getBlockAt(  tmp.getX(), tmp.getY(), tmp.getZ()+1 ).getType().equals(Material.AIR) || lobby.getWorld().getBlockAt(  tmp.getX(), tmp.getY(), tmp.getZ()-1 ).getType().equals(Material.AIR)) {
+                        		
+                        		dellevelscreen(px - 1, px + 1, py - 1, py + 1, pz , pz, tmp);
+                        		
+                        	}
+    						
+    						
     						
     					}
     				}
