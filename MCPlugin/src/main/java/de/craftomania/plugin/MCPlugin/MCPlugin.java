@@ -450,9 +450,7 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     	
     	int lowest = 1000;
     	int lowestindex = 0;
-    	
-    	int snd = 999;
-    	int sndindex = 0;
+    	int[] ret = new int[2];
     	
     	for (int i = 0; i < arr.length; i++) {
     		
@@ -463,16 +461,25 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     		
     	}
     	
-    	for (int i = 0; i < arr.length; i++) {
+    	ret[0] = lowestindex;
+    	
+    	int tmp = arr[0];
+    	arr[0] = arr[lowestindex];
+    	arr[lowestindex] = tmp;
+    	
+    	lowestindex = 0;
+    	lowest = 1000;
+    	
+    	for (int i = 1; i < arr.length; i++) {
     		
-    		if (arr[i] > lowest && arr[i] < snd) {
-    			snd = arr[i];
-    			sndindex = i;
+    		if (arr[i] < lowest ) {
+    			lowest = arr[i];
+    			lowestindex= i;
     		}
     		
     	}
     	
-    	int[] ret = {lowestindex, sndindex};
+    	ret[1] = lowestindex;
     	
     	return ret;
     	
