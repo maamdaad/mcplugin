@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.Random;
 import java.util.UUID;
 
 import javax.accessibility.AccessibleAction;
@@ -27,6 +28,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TippedArrow;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -38,6 +40,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.block.*;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public final class MCPlugin extends JavaPlugin implements Listener {
@@ -293,12 +297,21 @@ public final class MCPlugin extends JavaPlugin implements Listener {
             		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             		    public void run() {
             		    	ItemStack a = new ItemStack(Material.ARROW,1);
+                        	TippedArrow slow = (TippedArrow) new ItemStack(Material.TIPPED_ARROW);
+                        	TippedArrow weak = (TippedArrow) new ItemStack(Material.TIPPED_ARROW);
+                        	TippedArrow pois = (TippedArrow) new ItemStack(Material.TIPPED_ARROW);
+                        	TippedArrow dama = (TippedArrow) new ItemStack(Material.TIPPED_ARROW);
                         	
+                        	slow.setBasePotionData( new PotionData(PotionType.SLOWNESS) );
+                        	weak.setBasePotionData( new PotionData(PotionType.WEAKNESS) );
+                        	pois.setBasePotionData( new PotionData(PotionType.POISON) );
+                        	dama.setBasePotionData( new PotionData(PotionType.INSTANT_DAMAGE) );
+            		    	
             		    	boolean hatnoch = false;
             		    	
               		    	for (ItemStack item : target.getInventory().getContents()) {
             		    		if (item != null) {
-            		    			if (item.getType().equals(a.getType())) {
+            		    			if (item.getType().equals(a.getType()) || item.getType().equals(slow) || item.getType().equals(weak) || item.getType().equals(pois) || item.getType().equals(dama)) {
                 		    			target.sendMessage("Aha! Du hast noch einen Pfeil du Spasti!");
                 		    			hatnoch = true;
                 		    		}
@@ -309,6 +322,10 @@ public final class MCPlugin extends JavaPlugin implements Listener {
               		    	if (!hatnoch) {
               		    		
               		    		target.getInventory().setItem(8, a);
+              		    		
+              		    		Random rand = new Random();
+              		    		
+              		    		
               		    	}
 
             		    }

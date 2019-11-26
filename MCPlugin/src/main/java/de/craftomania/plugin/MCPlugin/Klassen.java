@@ -1,5 +1,4 @@
 package de.craftomania.plugin.MCPlugin;
-//hallölö
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -26,6 +25,10 @@ public class Klassen {
 	public static long MAX_food = 5;
 	
 	public static long[] jaeger_bowcooldown = {ticks * 3, ticks * 2, ticks * 2, ticks * 2, ticks * 1, ticks * 1, ticks * 1, ticks * 1, ticks * 1, ticks * 1};
+	public static long[] jaeger_slowchance = {};
+	public static long[] jaeger_weakchange = {};
+	public static long[] jaeger_poischance = {};
+	public static long[] jaeger_damachance = {};
 	
 	public static int[] jager_score = {0, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100};
 	
