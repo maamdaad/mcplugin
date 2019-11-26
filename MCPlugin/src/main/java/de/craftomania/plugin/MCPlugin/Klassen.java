@@ -81,27 +81,27 @@ public class Klassen {
 		int slevel = jaegerMeta(target, meta)[2];
 		
 		if (blevel == 1) {
-			target.sendMessage("1.BogenStufe");
+			target.sendMessage("Bogen Level 2");
 		}
 		
 		if (rlevel == 1) {
-			target.sendMessage("1.RüstungsStufe");
+			target.sendMessage("Rüstung Level 2");
 		}
 		
 		if (slevel == 1) {
-			target.sendMessage("1.Schwertsufe");
+			target.sendMessage("Schwert Level 2");
 		}
 		
 		if (blevel == 2) {
-			
+			target.sendMessage("Bogen Level 3");
 		}
 		
 		if (rlevel == 2) {
-			
+			target.sendMessage("Rüstung Level 3");
 		}
 		
 		if (slevel == 2) {
-			
+			target.sendMessage("Schwert Level 3");
 		}
 		
 		if (level == 0) {
