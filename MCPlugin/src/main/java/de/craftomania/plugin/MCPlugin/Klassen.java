@@ -210,7 +210,6 @@ public class Klassen {
     		hmeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
     		ArrayList<String> lore = new ArrayList<String>();
     		lore.add("+ 1 armor");
-    		lore.add("+ 16% Projektilabwehr");
     		hmeta.setLore(lore);
     		helm.setItemMeta(hmeta);
     		target.getInventory().setHelmet(helm);
@@ -237,7 +236,7 @@ public class Klassen {
     		lore.add("+ 2 armor");
     		lmeta.setLore(lore);
     		leggins.setItemMeta(lmeta);
-    		target.getInventory().setChestplate(leggins);
+    		target.getInventory().setLeggings(leggins);
     		
     		ItemStack boots = new ItemStack(Material.LEATHER_BOOTS, 1);
     		boots.addEnchantment(Enchantment.BINDING_CURSE, 1);
@@ -260,14 +259,14 @@ public class Klassen {
 			
 			int spos = 0;
 			ItemStack sword3 = new ItemStack(Material.WOODEN_SWORD, 1);
-			sword3.addEnchantment(Enchantment.DAMAGE_ALL, 1);
+			sword3.addEnchantment(Enchantment.DAMAGE_ALL, 2);
     		ItemMeta smeta = sword3.getItemMeta();
-    		smeta.setDisplayName("Jagdmesser II");
+    		smeta.setDisplayName("Jagdmesser III");
     		smeta.setUnbreakable(true);
     		sword3.setItemMeta(smeta);
 			for (ItemStack item : target.getInventory().getContents()) {
 	    		if (item != null) {
-	    			if (item.getItemMeta().getDisplayName().equalsIgnoreCase("Jagdmesser I")) {
+	    			if (item.getItemMeta().getDisplayName().equalsIgnoreCase("Jagdmesser II")) {
 		    			target.getInventory().setItem(spos, sword3);
 		    		}
 	    		}
