@@ -82,6 +82,7 @@ public class Klassen {
 		
 		if (blevel == 1) {
 			target.sendMessage("Bogen Level 2");
+			
 			int bpos = 0;
 			ItemStack bogen2 = new ItemStack(Material.BOW, 1);
 			bogen2.addEnchantment(Enchantment.ARROW_DAMAGE, 1);
@@ -155,19 +156,124 @@ public class Klassen {
 		}
 		
 		if (slevel == 1) {
-			target.sendMessage("Schwert Level 2");
+			
+			target.sendMessage("Jagdmesser Level 2");
+			
+			int spos = 0;
+			ItemStack sword2 = new ItemStack(Material.WOODEN_SWORD, 1);
+			sword2.addEnchantment(Enchantment.DAMAGE_ALL, 1);
+    		ItemMeta smeta = sword2.getItemMeta();
+    		smeta.setDisplayName("Jagdmesser II");
+    		smeta.setUnbreakable(true);
+    		sword2.setItemMeta(smeta);
+			for (ItemStack item : target.getInventory().getContents()) {
+	    		if (item != null) {
+	    			if (item.getItemMeta().getDisplayName().equalsIgnoreCase("Jagdmesser I")) {
+		    			target.getInventory().setItem(spos, sword2);
+		    		}
+	    		}
+	    		spos++;
+		    		
+	    	}
 		}
 		
 		if (blevel == 2) {
 			target.sendMessage("Bogen Level 3");
+			
+			int bpos = 0;
+			ItemStack bogen3 = new ItemStack(Material.BOW, 1);
+			bogen3.addEnchantment(Enchantment.ARROW_DAMAGE, 2);
+    		ItemMeta bmeta = bogen3.getItemMeta();
+    		bmeta.setDisplayName("Bogen des Jägers III");
+    		bmeta.setUnbreakable(true);
+    		bogen3.setItemMeta(bmeta);
+			for (ItemStack item : target.getInventory().getContents()) {
+	    		if (item != null) {
+	    			if (item.getItemMeta().getDisplayName().equalsIgnoreCase("Bogen des Jägers II")) {
+		    			target.getInventory().setItem(bpos, bogen3);
+		    		}
+	    		}
+	    		bpos++;
+		    		
+	    	}
 		}
 		
 		if (rlevel == 2) {
 			target.sendMessage("Rüstung Level 3");
+			
+			ItemStack helm = new ItemStack(Material.LEATHER_HELMET, 1);
+    		helm.addEnchantment(Enchantment.BINDING_CURSE, 1);
+    		helm.addEnchantment(Enchantment.PROTECTION_PROJECTILE, 2);
+    		ItemMeta hmeta = helm.getItemMeta();
+    		hmeta.setDisplayName("Rüstung des Jägers III");
+    		hmeta.setUnbreakable(true);
+    		hmeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+    		ArrayList<String> lore = new ArrayList<String>();
+    		lore.add("+ 1 armor");
+    		lore.add("+ 16% Projektilabwehr");
+    		hmeta.setLore(lore);
+    		helm.setItemMeta(hmeta);
+    		target.getInventory().setHelmet(helm);
+    		
+    		ItemStack chestplate = new ItemStack(Material.CHAINMAIL_CHESTPLATE, 1);
+    		chestplate.addEnchantment(Enchantment.BINDING_CURSE, 1);
+    		ItemMeta chmeta = chestplate.getItemMeta();
+    		chmeta.setDisplayName("Rüstung des Jägers III");
+    		chmeta.setUnbreakable(true);
+    		chmeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+    		lore = new ArrayList<String>();
+    		lore.add("+ 5 armor");
+    		chmeta.setLore(lore);
+    		chestplate.setItemMeta(chmeta);
+    		target.getInventory().setChestplate(chestplate);
+    		
+    		ItemStack leggins = new ItemStack(Material.LEATHER_LEGGINGS, 1);
+    		leggins.addEnchantment(Enchantment.BINDING_CURSE, 1);
+    		ItemMeta lmeta = leggins.getItemMeta();
+    		lmeta.setDisplayName("Rüstung des Jägers III");
+    		lmeta.setUnbreakable(true);
+    		lmeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+    		lore = new ArrayList<String>();
+    		lore.add("+ 2 armor");
+    		lmeta.setLore(lore);
+    		leggins.setItemMeta(lmeta);
+    		target.getInventory().setChestplate(leggins);
+    		
+    		ItemStack boots = new ItemStack(Material.LEATHER_BOOTS, 1);
+    		boots.addEnchantment(Enchantment.BINDING_CURSE, 1);
+    		ItemMeta btmeta = boots.getItemMeta();
+    		btmeta.setDisplayName("Rüstung des Jägers III");
+    		btmeta.setUnbreakable(true);
+    		btmeta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier("generic.movementspeed", 0.015, AttributeModifier.Operation.ADD_NUMBER));
+    		btmeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+    		lore = new ArrayList<String>();
+    		lore.add("+ 15% movement speed");
+    		lore.add("+ 1 armor");
+    		btmeta.setLore(lore);
+    		boots.setItemMeta(btmeta);
+    		target.getInventory().setBoots(boots);
 		}
 		
 		if (slevel == 2) {
-			target.sendMessage("Schwert Level 3");
+			
+			target.sendMessage("Jagdmesser Level 3");
+			
+			int spos = 0;
+			ItemStack sword3 = new ItemStack(Material.WOODEN_SWORD, 1);
+			sword3.addEnchantment(Enchantment.DAMAGE_ALL, 1);
+    		ItemMeta smeta = sword3.getItemMeta();
+    		smeta.setDisplayName("Jagdmesser II");
+    		smeta.setUnbreakable(true);
+    		sword3.setItemMeta(smeta);
+			for (ItemStack item : target.getInventory().getContents()) {
+	    		if (item != null) {
+	    			if (item.getItemMeta().getDisplayName().equalsIgnoreCase("Jagdmesser I")) {
+		    			target.getInventory().setItem(spos, sword3);
+		    		}
+	    		}
+	    		spos++;
+		    		
+	    	}
 		}
 		
 		if (level == 0) {
@@ -208,7 +314,7 @@ public class Klassen {
     		
     		ItemStack sword = new ItemStack(Material.WOODEN_SWORD,1);
     		ItemMeta smeta = sword.getItemMeta();
-    		smeta.setDisplayName("Schwert des Jägers");
+    		smeta.setDisplayName("Jagdmesser I");
     		smeta.setUnbreakable(true);
     		sword.setItemMeta(smeta);
     		target.getInventory().setItem(1, sword);
