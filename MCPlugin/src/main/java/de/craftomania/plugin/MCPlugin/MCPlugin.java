@@ -269,9 +269,11 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 			gamemodes.remove(target.getUniqueId().toString());
 			
 			if (teams.size() == 0) {
-				game.stop();
-				
-				game = null;
+				if (game != null) {
+					game.stop();
+					
+					game = null;
+				}
 			}
 			
 		} else {
@@ -446,44 +448,33 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 	    	}
 		}
     
-    private int[] lowestsnd(int[] arr) {
-    	
-    	int lowest = 1000;
-    	int lowestindex = 0;
-    	int[] ret = new int[2];
-    	
-    	for (int i = 0; i < arr.length; i++) {
-    		
-    		if (arr[i] < lowest) {
-    			lowest = arr[i];
-    			lowestindex = i;
-    		}
-    		
-    	}
-    	
-    	ret[0] = lowestindex;
-    	
-    	int tmp = arr[0];
-    	arr[0] = arr[lowestindex];
-    	arr[lowestindex] = tmp;
-    	
-    	lowestindex = 1;
-    	lowest = 1000;
-    	
-    	for (int i = 1; i < arr.length; i++) {
-    		
-    		if (arr[i] < lowest ) {
-    			lowest = arr[i];
-    			lowestindex= i;
-    		}
-    		
-    	}
-    	
-    	ret[1] = lowestindex;
-    	
-    	return ret;
-    	
-    }
+    private int[] lowestsnd(int arr[]) { 
+        int first, second, arr_size = arr.length;
+        int firstindex = 0, secondindex = 0;
+  
+        first = second = Integer.MAX_VALUE; 
+        for (int i = 0; i < arr_size ; i ++) 
+        { 
+            /* If current element is smaller than first 
+              then update both first and second */
+            if (arr[i] < first) 
+            { 
+                second = first; 
+                first = arr[i]; 
+                firstindex = i;
+            } 
+  
+            /* If arr[i] is in between first and second 
+               then update second  */
+            else if (arr[i] < second && i != firstindex) {
+                second = arr[i]; 
+                secondindex = i;
+            }
+        } 
+        int[] ret = {firstindex, secondindex};
+        
+        return ret;
+    } 
     
     private void showlevelscreen(Player target, int minx, int maxx, int miny, int maxy, int minz, int maxz, Sign sign) {
     	
@@ -499,6 +490,8 @@ public final class MCPlugin extends JavaPlugin implements Listener {
     		target.sendTitle("Nicht genug Score", "Score=" + score.get(target.getUniqueId().toString()) + ", du benötigst score=" + Klassen.getInstance().jager_score[level.get(target.getUniqueId().toString()) + 1]);
     		dellevelscreen(minx, maxx, miny, maxy, minz, maxz, sign);
     	} else {
+    		
+    		dellevelscreen(minx, maxx, miny, maxy, minz, maxz, sign);
 			
 			for (int py = maxy; py >= miny; py--) {
 	    		for (int pz = minz; pz <= maxz; pz++) {
@@ -544,20 +537,21 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 	        				if (teams.get(target.getUniqueId().toString()).equalsIgnoreCase("jaeger")) {
 	        					
 	        					int[] metalevel = Klassen.getInstance().jaegerMeta(target, meta.get(target.getUniqueId().toString()));
+	        					int min = lowestsnd(metalevel)[0];
 	        					
-	        					if (lowestsnd(metalevel)[0] == 0) {
+	        					if (min == 0) {
 	        						
 	        						//Rüstung
 	        						
 	        						editSign(px, py, pz, sign, "(applylevel)", "Rüstung", "", "");
 	        						
-	        					} else if (lowestsnd(metalevel)[0] == 1 ) {
+	        					} else if (min == 1 ) {
 	        						
 	        						//Bogen
 	        						
 	        						editSign(px, py, pz, sign, "(applylevel)", "Bogen", "", "");
 	        						
-	        					} else if (lowestsnd(metalevel)[0] == 2 ) {
+	        					} else if (min == 2 ) {
 	        						
 	        						//Schwert
 	        						
@@ -581,20 +575,21 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 	        				if (teams.get(target.getUniqueId().toString()).equalsIgnoreCase("jaeger")) {
 	        					
 	        					int[] metalevel = Klassen.getInstance().jaegerMeta(target, meta.get(target.getUniqueId().toString()));
+	        					int snd = lowestsnd(metalevel)[1];
 	        					
-	        					if (lowestsnd(metalevel)[1] == 0) {
+	        					if (snd == 0) {
 	        						
 	        						//Rüstung
 	        						
 	        						editSign(px, py, pz, sign, "(applylevel)", "Rüstung", "", "");
 	        						
-	        					} else if (lowestsnd(metalevel)[1] == 1 ) {
+	        					} else if (snd == 1 ) {
 	        						
 	        						//Bogen
 	        						
 	        						editSign(px, py, pz, sign, "(applylevel)", "Bogen", "", "");
 	        						
-	        					} else if (lowestsnd(metalevel)[1] == 2 ) {
+	        					} else if (snd == 2 ) {
 	        						
 	        						//Schwert
 	        						
