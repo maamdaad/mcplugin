@@ -12,6 +12,34 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+/*0. Pfeil 3sekunden
+1. Pfeil 2,5 sekunden
+2. 5% auf slowness 	
+3. 5% auf weakness
+4. 5% auf poison	
+5. 5% auf harming
+6. Pfeil 2 sekunden 	
+7. 10% auf s
+8. 10% auf w		
+9. 10% auf p
+10. 10% auf h 		
+11. P auf 1,5
+12. 15% s		
+13. 15% w
+14. 15% p		
+15. 15% h
+16. P auf 1		
+17. 20% s
+18. 20% w		
+19. 20% p
+20. 20% h		
+21. P auf 0.5
+22. 25% s		
+23. 25% w
+24. 25% p		
+25. 25% h
+ */
+
 public class Klassen {
 	
 	private static Klassen klassen;
