@@ -590,7 +590,7 @@ public final class MCPlugin extends JavaPlugin implements Listener {
  			target.sendMessage("Nicht in Team!");
      		dellevelscreen(minx, maxx, miny, maxy, minz, maxz, sign);
     	} else if (level.get( target.getUniqueId().toString() ) == (Klassen.getInstance().MAXLEVEL.get(teams.get(target.getUniqueId().toString())))) {
-			target.sendTitle("Max Levell, Level=" + (level.get(target.getUniqueId().toString()) + 1), "Du kannst nicht weiter aufsteigen!");
+			target.sendTitle("Max Levell, Level="  + (level.get(target.getUniqueId().toString()) + 1), "Du kannst nicht weiter aufsteigen!");
 			dellevelscreen(minx, maxx, miny, maxy, minz, maxz, sign);
 		} else if (score.get(target.getUniqueId().toString()) < Klassen.getInstance().jager_score[level.get(target.getUniqueId().toString()) + 1]) {
     		target.sendTitle("Nicht genug Score", "Score=" + score.get(target.getUniqueId().toString()) + ", du benötigst score=" + Klassen.getInstance().jager_score[level.get(target.getUniqueId().toString()) + 1]);
