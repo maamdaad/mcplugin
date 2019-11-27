@@ -611,7 +611,7 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 	        				
 	        				
 	        				
-	        				editSign(px, py, pz, sign, "Du bist auf", "Level " + (level.get(target.getUniqueId().toString()) + 1) + "", "aufgestiegen", "-------------");
+	        				editSign(px, py, pz, sign, "Du bist auf", "Level " + (level.get(target.getUniqueId().toString()) + 2) + "", "aufgestiegen", "-------------");
 	        				
 	        			} else if (signindex == 2) {
 	        				
