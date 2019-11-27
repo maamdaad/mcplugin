@@ -36,7 +36,7 @@ public class Klassen {
 	public Klassen() {
 		MAXLEVEL = new HashMap<String, Integer>();
 		
-		MAXLEVEL.put("jaeger", 10);
+		MAXLEVEL.put("jaeger", 26);
 		MAXLEVEL.put("tank", 10);
 	}
 	
