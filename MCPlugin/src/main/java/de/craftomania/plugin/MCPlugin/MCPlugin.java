@@ -46,6 +46,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.scoreboard.Team;
 
 public final class MCPlugin extends JavaPlugin implements Listener {
 
@@ -62,6 +65,13 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 	Location spawn;
 	Location lobby;
 	Location[] lobbydoor = new Location[4];
+	
+	ScoreboardManager manager;
+	Scoreboard sJaeger;
+	Scoreboard sTank;
+	
+	Team jaeger;
+	Team tank;
 	
 	MobGame game;	
 	
@@ -128,6 +138,13 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 		};
 		
 		run.runTaskLater(this, 1L);
+		
+		manager = Bukkit.getScoreboardManager();
+		sJaeger = Klassen.getInstance().jaegerScore(this);
+		sTank = Klassen.getInstance().tankScore(this);
+		
+		jaeger = Klassen.getInstance().jaegerTeam(this);
+		tank = Klassen.getInstance().tankTeam(this);
         
         
     }
@@ -274,6 +291,8 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 			teams.remove(target.getUniqueId().toString());
 			level.remove(target.getUniqueId().toString());
 			gamemodes.remove(target.getUniqueId().toString());
+			
+			target.setScoreboard(manager.getNewScoreboard());
 			
 			if (teams.size() == 0) {
 				if (game != null) {
@@ -916,11 +935,16 @@ public final class MCPlugin extends JavaPlugin implements Listener {
 		case "jaeger":
 	    	
 	    	Klassen.getInstance().jaeger(0, target, "r:0,b:0,s:0");
+	    	jaeger.addPlayer(target);
+	    	target.setScoreboard(sJaeger);
+	    	
 			
 			break;
 		case "tank":
 			
 	    	Klassen.getInstance().tank(0, target, "");
+	    	tank.addPlayer(target);
+	    	target.setScoreboard(sTank);
 			
 			break;
 		

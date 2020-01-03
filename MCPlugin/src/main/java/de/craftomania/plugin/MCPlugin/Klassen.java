@@ -11,6 +11,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
+
+import net.md_5.bungee.api.ChatColor;
 
 
 public class Klassen {
@@ -38,6 +45,8 @@ public class Klassen {
 		
 		MAXLEVEL.put("jaeger", 26);
 		MAXLEVEL.put("tank", 10);
+		
+		
 	}
 	
 	public static Klassen getInstance() {
@@ -529,6 +538,58 @@ public class Klassen {
 	}
 	
 	public void assasin(int level, Player target, String meta) {
+		
+	}
+	
+	public Team jaegerTeam(MCPlugin instance) {
+		
+		Team ret;
+		
+		ret = instance.sJaeger.registerNewTeam("Jaeger");
+		ret.setPrefix(" [jaeger] ");
+		ret.setDisplayName("Jaeger");
+		ret.setCanSeeFriendlyInvisibles(true);
+		ret.setAllowFriendlyFire(false);
+		
+		return ret;
+		
+	}
+	
+	public Scoreboard jaegerScore(MCPlugin instance) {
+		
+		Scoreboard ret = instance.manager.getNewScoreboard();
+		
+		Objective lev = ret.registerNewObjective("Level", "dummy");
+		lev.setDisplaySlot(DisplaySlot.SIDEBAR);
+		lev.setDisplayName("Level:");
+		
+		return ret;
+		
+	}
+	
+	public Team tankTeam(MCPlugin instance) {
+		
+		Team ret;
+		
+		ret = instance.sTank.registerNewTeam("Tank");
+		ret.setPrefix(" [tank] ");
+		ret.setDisplayName("Tank");
+		ret.setCanSeeFriendlyInvisibles(true);
+		ret.setAllowFriendlyFire(false);
+		
+		return ret;
+		
+	}
+	
+	public Scoreboard tankScore(MCPlugin instance) {
+		
+		Scoreboard ret = instance.manager.getNewScoreboard();
+		
+		Objective lev = ret.registerNewObjective("Level", "dummy");
+		lev.setDisplaySlot(DisplaySlot.SIDEBAR);
+		lev.setDisplayName("Level:");
+		
+		return ret;
 		
 	}
 	

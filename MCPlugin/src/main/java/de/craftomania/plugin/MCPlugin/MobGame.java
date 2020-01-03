@@ -15,6 +15,7 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.scoreboard.Team;
 
 public class MobGame {
 		
@@ -28,6 +29,8 @@ public class MobGame {
 	int skeletoncount = 0;
 	int currlevel = 0;
 	boolean roundrunning = false;
+	
+	
 	
 	ArrayList<BukkitRunnable> foodList = new ArrayList<BukkitRunnable>();
 	
